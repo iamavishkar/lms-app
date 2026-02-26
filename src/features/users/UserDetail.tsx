@@ -4,7 +4,7 @@ import { Box, Card, CardContent, Typography, Grid, Chip, Button, Divider } from 
 import { Edit, ArrowBack } from '@mui/icons-material';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetUserByIdQuery } from './usersApi';
+import { useGetUserByIdQuery } from '../../api/usersApi';
 import { formatDate } from '../../utils/helpers';
 
 const UserDetail: React.FC = () => {

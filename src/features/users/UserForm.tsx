@@ -1,74 +1,70 @@
-import React, { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import {
-  Box,
-  Card,
-  CardContent,
-  TextField,
-  Button,
-  Grid,
-  MenuItem,
-  CircularProgress,
-} from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import PageHeader from '../../components/common/PageHeader';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useCreateUserMutation, useUpdateUserMutation, useGetUserByIdQuery } from './usersApi';
-import { useGetRolesQuery } from '../roles/rolesApi';
-import { CreateUserDto } from '../../types';
-import { getErrorMessage } from '../../utils/helpers';
-import { useState } from 'react';
-
-const schema = yup.object({
-  name: yup.string().required('Name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup.string().when('$isEdit', {
-    is: false,
-    then: (s) => s.min(6).required('Password is required'),
-    otherwise: (s) => s.optional(),
-  }),
-  roleId: yup.number().required('Role is required'),
-  isActive: yup.boolean(),
-});
+import { useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Box, Card, CardContent } from "@mui/material";
+import { useDispatch } from "react-redux";
+import PageHeader from "../../components/common/PageHeader";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+import FormRenderer from "../../components/common/FormRenderer";
+import { useGetUserByIdQuery, useSaveUserMutation } from "../../api/usersApi";
+import { useGetRolesQuery } from "../../api/rolesApi";
+import { showSnackbar } from "../../store/uiSlice";
+import { getErrorMessage } from "../../utils/helpers";
+import { ROUTES } from "../../routes/routes";
+import { getUserFormFields } from "./forms/form-fields";
+import { userFormInitialValues } from "./forms/form-values";
+import { userFormSchema } from "./forms/form-schema";
+import type { CreateUserDto } from "../../types";
 
 const UserForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const isEdit = !!id;
   const navigate = useNavigate();
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
+  const dispatch = useDispatch();
 
-  const { data: user, isLoading: loadingUser } = useGetUserByIdQuery(Number(id), { skip: !isEdit });
-  const { data: roles } = useGetRolesQuery();
-  const [createUser, { isLoading: creating }] = useCreateUserMutation();
-  const [updateUser, { isLoading: updating }] = useUpdateUserMutation();
+  const { data: user, isLoading: loadingUser } = useGetUserByIdQuery(
+    Number(id),
+    { skip: !isEdit }
+  );
+  const { data: roles = [] } = useGetRolesQuery();
+  const [saveUser, { isLoading }] = useSaveUserMutation();
 
-  const { control, handleSubmit, reset, formState: { errors } } = useForm<CreateUserDto & { password?: string }>({
-    resolver: yupResolver(schema) as never,
-    context: { isEdit },
-    defaultValues: { name: '', email: '', password: '', isActive: true },
-  });
+  const fields = useMemo(() => {
+    const base = getUserFormFields(isEdit);
+    return base.map((f) =>
+      f.name === "roleId"
+        ? {
+            ...f,
+            options: roles.map((r) => ({ label: r.name, value: r.id })),
+          }
+        : f
+    );
+  }, [isEdit, roles]);
 
-  useEffect(() => {
-    if (user) {
-      reset({ name: user.name, email: user.email, roleId: user.role?.id, isActive: user.isActive });
-    }
-  }, [user, reset]);
-
-  const onSubmit = async (data: CreateUserDto & { password?: string }) => {
-    try {
-      if (isEdit) {
-        await updateUser({ id: Number(id), data }).unwrap();
-        setSnackbar({ open: true, message: 'User updated successfully', severity: 'success' });
-      } else {
-        await createUser(data as CreateUserDto).unwrap();
-        setSnackbar({ open: true, message: 'User created successfully', severity: 'success' });
+  const initialValues = user
+    ? {
+        name: user.name,
+        email: user.email,
+        password: "",
+        roleId: user.role?.id,
+        isActive: user.isActive,
       }
-      setTimeout(() => navigate('/users'), 1500);
+    : userFormInitialValues;
+
+  const onSubmit = async (values: Record<string, unknown>) => {
+    try {
+      await saveUser({
+        id: isEdit ? Number(id) : undefined,
+        data: values as unknown as CreateUserDto,
+      }).unwrap();
+      dispatch(
+        showSnackbar({
+          message: isEdit ? "User updated successfully" : "User created successfully",
+          severity: "success",
+        })
+      );
+      navigate(ROUTES.USERS.LIST);
     } catch (err) {
-      setSnackbar({ open: true, message: getErrorMessage(err), severity: 'error' });
+      dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));
     }
   };
 
@@ -76,95 +72,20 @@ const UserForm: React.FC = () => {
 
   return (
     <Box>
-      <PageHeader title={isEdit ? 'Edit User' : 'Create User'} />
+      <PageHeader title={isEdit ? "Edit User" : "Create User"} />
       <Card>
         <CardContent>
-          <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <Controller
-                  name="name"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField {...field} label="Full Name" fullWidth error={!!errors.name} helperText={errors.name?.message} />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Controller
-                  name="email"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField {...field} label="Email" type="email" fullWidth error={!!errors.email} helperText={errors.email?.message} />
-                  )}
-                />
-              </Grid>
-              {!isEdit && (
-                <Grid item xs={12} md={6}>
-                  <Controller
-                    name="password"
-                    control={control}
-                    render={({ field }) => (
-                      <TextField {...field} label="Password" type="password" fullWidth error={!!errors.password} helperText={errors.password?.message} />
-                    )}
-                  />
-                </Grid>
-              )}
-              <Grid item xs={12} md={6}>
-                <Controller
-                  name="roleId"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      select
-                      label="Role"
-                      fullWidth
-                      error={!!errors.roleId}
-                      helperText={errors.roleId?.message}
-                      value={field.value ?? ''}
-                    >
-                      {roles?.map((role) => (
-                        <MenuItem key={role.id} value={role.id}>{role.name}</MenuItem>
-                      ))}
-                    </TextField>
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Controller
-                  name="isActive"
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      select
-                      label="Status"
-                      fullWidth
-                      value={field.value ? 'true' : 'false'}
-                      onChange={(e) => field.onChange(e.target.value === 'true')}
-                    >
-                      <MenuItem value="true">Active</MenuItem>
-                      <MenuItem value="false">Inactive</MenuItem>
-                    </TextField>
-                  )}
-                />
-              </Grid>
-            </Grid>
-            <Box mt={3} display="flex" gap={2}>
-              <Button type="submit" variant="contained" disabled={creating || updating}>
-                {creating || updating ? <CircularProgress size={20} /> : isEdit ? 'Update' : 'Create'}
-              </Button>
-              <Button variant="outlined" onClick={() => navigate('/users')}>Cancel</Button>
-            </Box>
-          </Box>
+          <FormRenderer
+            fields={fields}
+            initialValues={initialValues as unknown as Record<string, unknown>}
+            validationSchema={userFormSchema(isEdit)}
+            onSubmit={onSubmit}
+            onCancel={() => navigate(ROUTES.USERS.LIST)}
+            submitLabel={isEdit ? "Update" : "Create"}
+            isLoading={isLoading}
+          />
         </CardContent>
       </Card>
-      <NotificationSnackbar
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
-      />
     </Box>
   );
 };

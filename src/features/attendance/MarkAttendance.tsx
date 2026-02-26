@@ -23,9 +23,9 @@ import {
 import PageHeader from '../../components/common/PageHeader';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetClassesQuery } from '../classes/classesApi';
-import { useGetStudentsQuery } from '../students/studentsApi';
-import { useMarkAttendanceMutation } from './attendanceApi';
+import { useGetClassesQuery } from '../../api/classesApi';
+import { useGetStudentsQuery } from '../../api/studentsApi';
+import { useMarkAttendanceMutation } from '../../api/attendanceApi';
 import { AttendanceStatus } from '../../types';
 import { getErrorMessage } from '../../utils/helpers';
 

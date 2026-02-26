@@ -1,63 +1,75 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Card, CardContent, TextField, Button, Grid, MenuItem, CircularProgress } from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import PageHeader from '../../components/common/PageHeader';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useCreateClassMutation, useUpdateClassMutation, useGetClassByIdQuery } from './classesApi';
-import { useGetTeachersQuery } from '../teachers/teachersApi';
-import { CreateClassDto } from '../../types';
-import { getErrorMessage } from '../../utils/helpers';
-
-const schema = yup.object({
-  name: yup.string().required('Name is required'),
-  section: yup.string().optional(),
-  academicYear: yup.string().required('Academic year is required'),
-  teacherId: yup.number().optional(),
-});
+import { useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Box, Card, CardContent } from "@mui/material";
+import { useDispatch } from "react-redux";
+import PageHeader from "../../components/common/PageHeader";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+import FormRenderer from "../../components/common/FormRenderer";
+import { useGetClassByIdQuery, useSaveClassMutation } from "../../api/classesApi";
+import { useGetTeachersQuery } from "../../api/teachersApi";
+import { showSnackbar } from "../../store/uiSlice";
+import { getErrorMessage } from "../../utils/helpers";
+import { ROUTES } from "../../routes/routes";
+import { classFormFields } from "./forms/form-fields";
+import { classFormInitialValues } from "./forms/form-values";
+import { classFormSchema } from "./forms/form-schema";
+import type { CreateClassDto } from "../../types";
 
 const ClassForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const isEdit = !!id;
   const navigate = useNavigate();
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
+  const dispatch = useDispatch();
 
-  const { data: cls, isLoading: loadingClass } = useGetClassByIdQuery(Number(id), { skip: !isEdit });
-  const { data: teachers } = useGetTeachersQuery();
-  const [createClass, { isLoading: creating }] = useCreateClassMutation();
-  const [updateClass, { isLoading: updating }] = useUpdateClassMutation();
+  const { data: cls, isLoading: loadingClass } = useGetClassByIdQuery(
+    Number(id),
+    { skip: !isEdit }
+  );
+  const { data: teachers = [] } = useGetTeachersQuery();
+  const [saveClass, { isLoading }] = useSaveClassMutation();
 
-  const { control, handleSubmit, reset, formState: { errors } } = useForm<CreateClassDto>({
-    resolver: yupResolver(schema) as never,
-    defaultValues: { name: '', section: '', academicYear: '' },
-  });
+  // Inject dynamic teacher options into the field definitions
+  const fields = useMemo(() => {
+    return classFormFields.map((f) =>
+      f.name === "teacherId"
+        ? {
+            ...f,
+            options: [
+              { label: "None", value: "" },
+              ...teachers.map((t) => ({
+                label: t.user?.name ?? `Teacher #${t.id}`,
+                value: t.id,
+              })),
+            ],
+          }
+        : f
+    );
+  }, [teachers]);
 
-  useEffect(() => {
-    if (cls) {
-      reset({
+  const initialValues: CreateClassDto = cls
+    ? {
         name: cls.name,
-        section: cls.section,
+        section: cls.section ?? "",
         academicYear: cls.academicYear,
         teacherId: cls.teacher?.id,
-      });
-    }
-  }, [cls, reset]);
-
-  const onSubmit = async (data: CreateClassDto) => {
-    try {
-      if (isEdit) {
-        await updateClass({ id: Number(id), data }).unwrap();
-        setSnackbar({ open: true, message: 'Class updated', severity: 'success' });
-      } else {
-        await createClass(data).unwrap();
-        setSnackbar({ open: true, message: 'Class created', severity: 'success' });
       }
-      setTimeout(() => navigate('/classes'), 1500);
+    : classFormInitialValues;
+
+  const onSubmit = async (values: Record<string, unknown>) => {
+    try {
+      await saveClass({
+        id: isEdit ? Number(id) : undefined,
+        data: values as unknown as CreateClassDto,
+      }).unwrap();
+      dispatch(
+        showSnackbar({
+          message: isEdit ? "Class updated successfully" : "Class created successfully",
+          severity: "success",
+        })
+      );
+      navigate(ROUTES.CLASSES.LIST);
     } catch (err) {
-      setSnackbar({ open: true, message: getErrorMessage(err), severity: 'error' });
+      dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));
     }
   };
 
@@ -65,50 +77,20 @@ const ClassForm: React.FC = () => {
 
   return (
     <Box>
-      <PageHeader title={isEdit ? 'Edit Class' : 'Create Class'} />
+      <PageHeader title={isEdit ? "Edit Class" : "Create Class"} />
       <Card>
         <CardContent>
-          <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={4}>
-                <Controller name="name" control={control} render={({ field }) => (
-                  <TextField {...field} label="Class Name" fullWidth error={!!errors.name} helperText={errors.name?.message} />
-                )} />
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Controller name="section" control={control} render={({ field }) => (
-                  <TextField {...field} label="Section" fullWidth />
-                )} />
-              </Grid>
-              <Grid item xs={12} md={4}>
-                <Controller name="academicYear" control={control} render={({ field }) => (
-                  <TextField {...field} label="Academic Year" fullWidth error={!!errors.academicYear} helperText={errors.academicYear?.message} placeholder="e.g. 2024-2025" />
-                )} />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Controller name="teacherId" control={control} render={({ field }) => (
-                  <TextField {...field} select label="Class Teacher" fullWidth value={field.value ?? ''} onChange={(e) => field.onChange(Number(e.target.value))}>
-                    <MenuItem value="">None</MenuItem>
-                    {teachers?.map((t) => <MenuItem key={t.id} value={t.id}>{t.user?.name}</MenuItem>)}
-                  </TextField>
-                )} />
-              </Grid>
-            </Grid>
-            <Box mt={3} display="flex" gap={2}>
-              <Button type="submit" variant="contained" disabled={creating || updating}>
-                {creating || updating ? <CircularProgress size={20} /> : isEdit ? 'Update' : 'Create'}
-              </Button>
-              <Button variant="outlined" onClick={() => navigate('/classes')}>Cancel</Button>
-            </Box>
-          </Box>
+          <FormRenderer
+            fields={fields}
+            initialValues={initialValues as unknown as Record<string, unknown>}
+            validationSchema={classFormSchema}
+            onSubmit={onSubmit}
+            onCancel={() => navigate(ROUTES.CLASSES.LIST)}
+            submitLabel={isEdit ? "Update" : "Create"}
+            isLoading={isLoading}
+          />
         </CardContent>
       </Card>
-      <NotificationSnackbar
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
-      />
     </Box>
   );
 };

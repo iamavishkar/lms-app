@@ -9,7 +9,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetResultsQuery, useDeleteResultMutation } from './resultsApi';
+import { useGetResultsQuery, useDeleteResultMutation } from '../../api/resultsApi';
 import { getErrorMessage, calculateGrade } from '../../utils/helpers';
 
 const ResultList: React.FC = () => {

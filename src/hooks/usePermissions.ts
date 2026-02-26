@@ -1,20 +1,24 @@
-import { useAuth } from './useAuth';
-import { ROLES } from '../utils/constants';
+import { useAuth } from "./useAuth";
+import { UserRole } from "../types/enums";
 
 export const usePermissions = () => {
   const { user } = useAuth();
-  const roleName = user?.role?.name?.toLowerCase();
+  const roleName = user?.role?.name?.toLowerCase() as UserRole | undefined;
 
   return {
-    isAdmin: roleName === ROLES.ADMIN,
-    isTeacher: roleName === ROLES.TEACHER,
-    isStudent: roleName === ROLES.STUDENT,
-    isParent: roleName === ROLES.PARENT,
-    canManageUsers: roleName === ROLES.ADMIN,
-    canManageStudents: roleName === ROLES.ADMIN || roleName === ROLES.TEACHER,
-    canMarkAttendance: roleName === ROLES.ADMIN || roleName === ROLES.TEACHER,
-    canManageExams: roleName === ROLES.ADMIN || roleName === ROLES.TEACHER,
-    canManageResults: roleName === ROLES.ADMIN || roleName === ROLES.TEACHER,
+    isAdmin: roleName === UserRole.ADMIN,
+    isTeacher: roleName === UserRole.TEACHER,
+    isStudent: roleName === UserRole.STUDENT,
+    isParent: roleName === UserRole.PARENT,
+    canManageUsers: roleName === UserRole.ADMIN,
+    canManageStudents:
+      roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
+    canMarkAttendance:
+      roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
+    canManageExams:
+      roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
+    canManageResults:
+      roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
     roleName,
   };
 };

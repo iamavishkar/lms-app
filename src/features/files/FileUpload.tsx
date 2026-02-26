@@ -15,7 +15,7 @@ import {
 import { CloudUpload, InsertDriveFile, CheckCircle } from '@mui/icons-material';
 import PageHeader from '../../components/common/PageHeader';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useUploadFileMutation } from './fileApi';
+import { useUploadFileMutation } from '../../api/filesApi';
 import { getErrorMessage } from '../../utils/helpers';
 import { FileUploadResponse } from '../../types';
 

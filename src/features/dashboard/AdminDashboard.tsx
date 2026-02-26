@@ -4,7 +4,7 @@ import { People, School, SupervisorAccount, FamilyRestroom, Class, Subject } fro
 import StatsCard from '../../components/common/StatsCard';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetDashboardStatsQuery } from './dashboardApi';
+import { useGetDashboardStatsQuery } from '../../api/dashboardApi';
 import { formatDate } from '../../utils/helpers';
 
 const AdminDashboard: React.FC = () => {

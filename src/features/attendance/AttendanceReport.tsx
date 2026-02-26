@@ -18,9 +18,9 @@ import {
 } from '@mui/material';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetAttendanceQuery } from './attendanceApi';
-import { useGetStudentsQuery } from '../students/studentsApi';
-import { useGetClassesQuery } from '../classes/classesApi';
+import { useGetAttendanceQuery } from '../../api/attendanceApi';
+import { useGetStudentsQuery } from '../../api/studentsApi';
+import { useGetClassesQuery } from '../../api/classesApi';
 import { formatDate } from '../../utils/helpers';
 import { AttendanceStatus } from '../../types';
 

@@ -4,7 +4,7 @@ import { Box, Card, CardContent, Typography, Grid, Button, Divider, Chip, Table,
 import { Edit, ArrowBack } from '@mui/icons-material';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetClassByIdQuery } from './classesApi';
+import { useGetClassByIdQuery } from '../../api/classesApi';
 
 const ClassDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

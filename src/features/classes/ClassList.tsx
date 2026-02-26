@@ -9,7 +9,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetClassesQuery, useDeleteClassMutation } from './classesApi';
+import { useGetClassesQuery, useDeleteClassMutation } from '../../api/classesApi';
 import { getErrorMessage } from '../../utils/helpers';
 
 const ClassList: React.FC = () => {

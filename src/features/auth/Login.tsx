@@ -17,7 +17,7 @@ import { Visibility, VisibilityOff, School } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useLoginMutation } from './authApi';
+import { useLoginMutation } from '../../api/authApi';
 import { setCredentials } from './authSlice';
 import { LoginCredentials } from '../../types';
 
