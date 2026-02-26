@@ -1,4 +1,3 @@
-import type { CreateUserDto } from "../interfaces/user";
 import type { CreateRoleDto } from "../interfaces/role";
 import type { CreateStudentDto } from "../interfaces/student";
 import type { CreateTeacherDto } from "../interfaces/teacher";
@@ -14,20 +13,18 @@ export const loginInitialValues: LoginCredentials = {
   password: "",
 };
 
-export const registerInitialValues: Omit<RegisterData, "roleId"> & {
-  roleId: number | undefined;
-} = {
+export const registerInitialValues: RegisterData = {
   name: "",
   email: "",
   password: "",
   roleId: undefined,
 };
 
-export const userInitialValues: CreateUserDto & { isActive: boolean } = {
+export const userInitialValues = {
   name: "",
   email: "",
   password: "",
-  roleId: 0,
+  roleId: undefined as number | undefined,
   isActive: true,
 };
 
@@ -42,7 +39,7 @@ export const studentInitialValues: CreateStudentDto = {
   gender: "",
   address: "",
   phone: "",
-  userId: 0,
+  userId: undefined as unknown as number,
   classId: undefined,
   parentId: undefined,
 };
@@ -53,14 +50,14 @@ export const teacherInitialValues: CreateTeacherDto = {
   specialization: "",
   phone: "",
   address: "",
-  userId: 0,
+  userId: undefined as unknown as number,
 };
 
 export const parentInitialValues: CreateParentDto = {
   phone: "",
   address: "",
   occupation: "",
-  userId: 0,
+  userId: undefined as unknown as number,
 };
 
 export const classInitialValues: CreateClassDto = {
@@ -82,14 +79,14 @@ export const examInitialValues: CreateExamDto = {
   date: "",
   duration: 60,
   totalMarks: 100,
-  subjectId: 0,
-  classId: 0,
+  subjectId: undefined as unknown as number,
+  classId: undefined as unknown as number,
 };
 
 export const resultInitialValues: CreateResultDto = {
   marksObtained: 0,
   grade: "",
   remarks: "",
-  studentId: 0,
-  examId: 0,
+  studentId: undefined as unknown as number,
+  examId: undefined as unknown as number,
 };

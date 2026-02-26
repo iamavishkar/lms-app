@@ -23,6 +23,10 @@ const SubjectForm: React.FC = () => {
   const { data: subject, isLoading: loadingSubject } = useGetSubjectByIdQuery(Number(id), { skip: !isEdit });
   const [saveSubject, { isLoading }] = useSaveSubjectMutation();
 
+  const editValues = subject
+    ? { name: subject.name, code: subject.code, description: subject.description ?? "" }
+    : undefined;
+
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
       await saveSubject({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateSubjectDto }).unwrap();
@@ -42,7 +46,7 @@ const SubjectForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={subjectFormFields}
-            initialValues={(subject || subjectInitialValues) as unknown as Record<string, unknown>}
+            initialValues={(editValues || subjectInitialValues) as unknown as Record<string, unknown>}
             validationSchema={subjectFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.SUBJECTS.LIST)}

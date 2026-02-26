@@ -23,6 +23,8 @@ const RoleForm: React.FC = () => {
   const { data: role, isLoading: loadingRole } = useGetRoleByIdQuery(Number(id), { skip: !isEdit });
   const [saveRole, { isLoading }] = useSaveRoleMutation();
 
+  const editValues = role ? { name: role.name, description: role.description ?? "" } : undefined;
+
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
       await saveRole({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateRoleDto }).unwrap();
@@ -42,7 +44,7 @@ const RoleForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={roleFormFields}
-            initialValues={(role || roleInitialValues) as unknown as Record<string, unknown>}
+            initialValues={(editValues || roleInitialValues) as unknown as Record<string, unknown>}
             validationSchema={roleFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.ROLES.LIST)}
