@@ -6,6 +6,11 @@ export const classFormSchema = yup.object({
   academicYear: yup
     .string()
     .required("Academic year is required")
-    .matches(/^\d{4}-\d{4}$/, "Format must be YYYY-YYYY (e.g. 2024-2025)"),
+    .matches(/^\d{4}-\d{4}$/, "Format must be YYYY-YYYY (e.g. 2024-2025)")
+    .test("valid-range", "End year must be one year after start year", (value) => {
+      if (!value) return true;
+      const [start, end] = value.split("-").map(Number);
+      return end === start + 1;
+    }),
   teacherId: yup.number().nullable(),
 });

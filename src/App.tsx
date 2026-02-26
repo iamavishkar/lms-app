@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import ProtectedRoute from "./features/auth/ProtectedRoute";
 import DashboardLayout from "./components/layout/DashboardLayout";
 import { ROUTES } from "./routes/routes";
@@ -164,8 +164,12 @@ const App: React.FC = () => {
               minHeight="100vh"
             >
               <Box textAlign="center">
-                <h2>403 — Unauthorized</h2>
-                <p>You do not have permission to access this page.</p>
+                <Typography variant="h4" gutterBottom>
+                  403 — Unauthorized
+                </Typography>
+                <Typography color="text.secondary">
+                  You do not have permission to access this page.
+                </Typography>
               </Box>
             </Box>
           }
@@ -182,8 +186,12 @@ const App: React.FC = () => {
               minHeight="100vh"
             >
               <Box textAlign="center">
-                <h2>404 — Page Not Found</h2>
-                <p>The page you are looking for does not exist.</p>
+                <Typography variant="h4" gutterBottom>
+                  404 — Page Not Found
+                </Typography>
+                <Typography color="text.secondary">
+                  The page you are looking for does not exist.
+                </Typography>
               </Box>
             </Box>
           }
