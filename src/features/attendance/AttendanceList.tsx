@@ -19,7 +19,11 @@ const statusColor: Record<string, "success" | "error" | "warning"> = {
 const AttendanceList: React.FC = () => {
   const navigate = useNavigate();
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" as "success" | "error" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
 
   const { data: attendance = [], isLoading, error } = useGetAttendanceQuery();
   const [deleteAttendance] = useDeleteAttendanceMutation();
@@ -38,21 +42,48 @@ const AttendanceList: React.FC = () => {
   if (error) return <ErrorAlert message="Failed to load attendance" />;
 
   const columns: GridColDef[] = [
-    { field: "date", headerName: "Date", width: 130, valueGetter: (value) => formatDate(value) },
-    { field: "student", headerName: "Student", flex: 1, valueGetter: (_, row) => row.student?.user?.name },
-    { field: "class", headerName: "Class", width: 120, valueGetter: (_, row) => row.class?.name },
+    {
+      field: "date",
+      headerName: "Date",
+      width: 130,
+      renderCell: ({ value }) => <>{formatDate(value)}</>,
+    },
+    {
+      field: "student",
+      headerName: "Student",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: ({ row }) => <>{row.student?.user?.name}</>,
+    },
+    {
+      field: "class",
+      headerName: "Class",
+      width: 120,
+      sortable: false,
+      filterable: false,
+      renderCell: ({ row }) => <>{row.class?.name}</>,
+    },
     {
       field: "status",
       headerName: "Status",
       width: 110,
-      renderCell: ({ value }) => <Chip label={value} size="small" color={statusColor[value] ?? "default"} />,
+      renderCell: ({ value }) => (
+        <Chip label={value} size="small" color={statusColor[value] ?? "default"} />
+      ),
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
       getActions: ({ id }) => [
-        <GridActionsCellItem key="delete" icon={<Delete />} label="Delete" onClick={() => setDeleteId(id as number)} color="error" />,
+        <GridActionsCellItem
+          key="delete"
+          icon={<Delete />}
+          label="Delete"
+          onClick={() => setDeleteId(id as number)}
+          color="error"
+        />,
       ],
     },
   ];
@@ -62,7 +93,11 @@ const AttendanceList: React.FC = () => {
       <PageHeader
         title="Attendance"
         subtitle={`${attendance.length} records`}
-        action={{ label: "Mark Attendance", icon: <Add />, onClick: () => navigate("/attendance/mark") }}
+        action={{
+          label: "Mark Attendance",
+          icon: <Add />,
+          onClick: () => navigate("/attendance/mark"),
+        }}
       />
       <DataGrid
         rows={attendance}

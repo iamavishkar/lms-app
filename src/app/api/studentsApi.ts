@@ -19,9 +19,7 @@ export const studentsApi = apiSlice.injectEndpoints({
       { id?: number; data: CreateStudentDto | Partial<CreateStudentDto> }
     >({
       query: ({ id, data }) => ({
-        url: id
-          ? API_ENDPOINTS.STUDENTS.BY_ID(id)
-          : API_ENDPOINTS.STUDENTS.BASE,
+        url: id ? API_ENDPOINTS.STUDENTS.BY_ID(id) : API_ENDPOINTS.STUDENTS.BASE,
         method: id ? "PUT" : "POST",
         body: data,
       }),

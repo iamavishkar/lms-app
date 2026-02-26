@@ -19,9 +19,7 @@ export const subjectsApi = apiSlice.injectEndpoints({
       { id?: number; data: CreateSubjectDto | Partial<CreateSubjectDto> }
     >({
       query: ({ id, data }) => ({
-        url: id
-          ? API_ENDPOINTS.SUBJECTS.BY_ID(id)
-          : API_ENDPOINTS.SUBJECTS.BASE,
+        url: id ? API_ENDPOINTS.SUBJECTS.BY_ID(id) : API_ENDPOINTS.SUBJECTS.BASE,
         method: id ? "PUT" : "POST",
         body: data,
       }),

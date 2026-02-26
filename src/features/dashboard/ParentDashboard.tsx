@@ -1,10 +1,10 @@
-import React from 'react';
-import { Grid, Typography, Box, Card, CardContent } from '@mui/material';
-import { School, EventNote, Assignment, Assessment } from '@mui/icons-material';
-import StatsCard from '../../components/common/StatsCard';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetDashboardStatsQuery } from '../../app/api/dashboardApi';
+import React from "react";
+import { Grid, Typography, Box, Card, CardContent } from "@mui/material";
+import { School, EventNote, Assignment, Assessment } from "@mui/icons-material";
+import StatsCard from "../../components/common/StatsCard";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+import ErrorAlert from "../../components/common/ErrorAlert";
+import { useGetDashboardStatsQuery } from "../../app/api/dashboardApi";
 
 const ParentDashboard: React.FC = () => {
   const { data: stats, isLoading, error } = useGetDashboardStatsQuery();

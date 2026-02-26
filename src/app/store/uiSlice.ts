@@ -27,10 +27,7 @@ const uiSlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
     },
-    showSnackbar(
-      state,
-      action: PayloadAction<Omit<SnackbarState, "open">>
-    ) {
+    showSnackbar(state, action: PayloadAction<Omit<SnackbarState, "open">>) {
       state.snackbar = { ...action.payload, open: true };
     },
     hideSnackbar(state) {

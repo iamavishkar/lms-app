@@ -11,14 +11,10 @@ export const usePermissions = () => {
     isStudent: roleName === UserRole.STUDENT,
     isParent: roleName === UserRole.PARENT,
     canManageUsers: roleName === UserRole.ADMIN,
-    canManageStudents:
-      roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
-    canMarkAttendance:
-      roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
-    canManageExams:
-      roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
-    canManageResults:
-      roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
+    canManageStudents: roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
+    canMarkAttendance: roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
+    canManageExams: roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
+    canManageResults: roleName === UserRole.ADMIN || roleName === UserRole.TEACHER,
     roleName,
   };
 };

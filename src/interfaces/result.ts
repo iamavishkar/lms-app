@@ -19,4 +19,3 @@ export interface CreateResultDto {
   studentId: number;
   examId: number;
 }
-

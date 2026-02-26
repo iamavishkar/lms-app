@@ -1,6 +1,13 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AuthState, User } from '../../interfaces';
-import { getToken, getStoredUser, setToken, setStoredUser, removeToken, removeStoredUser } from '../../utils/helpers';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AuthState, User } from "../../interfaces";
+import {
+  getToken,
+  getStoredUser,
+  setToken,
+  setStoredUser,
+  removeToken,
+  removeStoredUser,
+} from "../../utils/helpers";
 
 const initialState: AuthState = {
   user: getStoredUser(),
@@ -9,7 +16,7 @@ const initialState: AuthState = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     setCredentials: (state, action: PayloadAction<{ user: User; token: string }>) => {

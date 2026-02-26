@@ -23,9 +23,26 @@ const ClassDetail: React.FC = () => {
   ];
 
   const studentColumns: GridColDef[] = [
-    { field: "enrollmentNumber", headerName: "Enrollment #", width: 160, renderCell: ({ value }) => <Chip label={value} size="small" /> },
-    { field: "name", headerName: "Name", flex: 1, valueGetter: (_, row) => row.user?.name },
-    { field: "gender", headerName: "Gender", width: 100, valueGetter: (value) => value || "-" },
+    {
+      field: "enrollmentNumber",
+      headerName: "Enrollment #",
+      width: 160,
+      renderCell: ({ value }) => <Chip label={value} size="small" />,
+    },
+    {
+      field: "user",
+      headerName: "Name",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: ({ row }) => <>{row.user?.name}</>,
+    },
+    {
+      field: "gender",
+      headerName: "Gender",
+      width: 100,
+      renderCell: ({ value }) => <>{value || "-"}</>,
+    },
   ];
 
   return (
@@ -39,7 +56,11 @@ const ClassDetail: React.FC = () => {
             Class Details
           </Typography>
         </Box>
-        <Button startIcon={<Edit />} variant="contained" onClick={() => navigate(`/classes/${id}/edit`)}>
+        <Button
+          startIcon={<Edit />}
+          variant="contained"
+          onClick={() => navigate(`/classes/${id}/edit`)}
+        >
           Edit
         </Button>
       </Box>
@@ -64,7 +85,13 @@ const ClassDetail: React.FC = () => {
               Students ({cls.students.length})
             </Typography>
             <Divider sx={{ mb: 2 }} />
-            <DataGrid rows={cls.students} columns={studentColumns} autoHeight pageSizeOptions={[10, 25]} initialState={{ pagination: { paginationModel: { pageSize: 10 } } }} />
+            <DataGrid
+              rows={cls.students}
+              columns={studentColumns}
+              autoHeight
+              pageSizeOptions={[10, 25]}
+              initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
+            />
           </CardContent>
         </Card>
       )}

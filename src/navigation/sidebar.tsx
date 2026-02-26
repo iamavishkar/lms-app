@@ -31,12 +31,7 @@ export const NAV_ITEMS: SidebarNavItem[] = [
     segment: "dashboard",
     title: "Dashboard",
     icon: <DashboardIcon />,
-    roles: [
-      UserRole.ADMIN,
-      UserRole.TEACHER,
-      UserRole.STUDENT,
-      UserRole.PARENT,
-    ],
+    roles: [UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT, UserRole.PARENT],
   },
   {
     segment: "users",
@@ -84,34 +79,19 @@ export const NAV_ITEMS: SidebarNavItem[] = [
     segment: "attendance",
     title: "Attendance",
     icon: <EventNoteIcon />,
-    roles: [
-      UserRole.ADMIN,
-      UserRole.TEACHER,
-      UserRole.STUDENT,
-      UserRole.PARENT,
-    ],
+    roles: [UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT, UserRole.PARENT],
   },
   {
     segment: "exams",
     title: "Exams",
     icon: <AssignmentIcon />,
-    roles: [
-      UserRole.ADMIN,
-      UserRole.TEACHER,
-      UserRole.STUDENT,
-      UserRole.PARENT,
-    ],
+    roles: [UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT, UserRole.PARENT],
   },
   {
     segment: "results",
     title: "Results",
     icon: <AssessmentIcon />,
-    roles: [
-      UserRole.ADMIN,
-      UserRole.TEACHER,
-      UserRole.STUDENT,
-      UserRole.PARENT,
-    ],
+    roles: [UserRole.ADMIN, UserRole.TEACHER, UserRole.STUDENT, UserRole.PARENT],
   },
   {
     segment: "files",
@@ -128,20 +108,18 @@ export const NAV_ITEMS: SidebarNavItem[] = [
 export function buildNavigation(role: UserRole | undefined): Navigation {
   if (!role) return [];
 
-  return NAV_ITEMS.filter((item) => item.roles.includes(role)).map(
-    (item) => ({
-      segment: item.segment,
-      title: item.title,
-      icon: item.icon,
-      ...(item.children
-        ? {
-            children: item.children.map((child) => ({
-              segment: child.segment,
-              title: child.title,
-              icon: child.icon,
-            })),
-          }
-        : {}),
-    })
-  );
+  return NAV_ITEMS.filter((item) => item.roles.includes(role)).map((item) => ({
+    segment: item.segment,
+    title: item.title,
+    icon: item.icon,
+    ...(item.children
+      ? {
+          children: item.children.map((child) => ({
+            segment: child.segment,
+            title: child.title,
+            icon: child.icon,
+          })),
+        }
+      : {}),
+  }));
 }

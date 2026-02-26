@@ -1,10 +1,6 @@
 import { apiSlice } from "./apiSlice";
 import { API_ENDPOINTS } from "./endpoints";
-import type {
-  Attendance,
-  CreateAttendanceDto,
-  MarkAttendanceDto,
-} from "../../interfaces";
+import type { Attendance, CreateAttendanceDto, MarkAttendanceDto } from "../../interfaces";
 
 export const attendanceApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -18,14 +14,9 @@ export const attendanceApi = apiSlice.injectEndpoints({
       providesTags: (_r, _e, id) => [{ type: "Attendance", id }],
     }),
 
-    saveAttendance: builder.mutation<
-      Attendance,
-      { id?: number; data: CreateAttendanceDto }
-    >({
+    saveAttendance: builder.mutation<Attendance, { id?: number; data: CreateAttendanceDto }>({
       query: ({ id, data }) => ({
-        url: id
-          ? API_ENDPOINTS.ATTENDANCE.BY_ID(id)
-          : API_ENDPOINTS.ATTENDANCE.BASE,
+        url: id ? API_ENDPOINTS.ATTENDANCE.BY_ID(id) : API_ENDPOINTS.ATTENDANCE.BASE,
         method: id ? "PUT" : "POST",
         body: data,
       }),

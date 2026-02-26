@@ -15,18 +15,16 @@ export const usersApi = apiSlice.injectEndpoints({
     }),
 
     /** Single save mutation: creates when no id, updates when id is provided */
-    saveUser: builder.mutation<
-      User,
-      { id?: number; data: CreateUserDto | Partial<CreateUserDto> }
-    >({
-      query: ({ id, data }) => ({
-        url: id ? API_ENDPOINTS.USERS.BY_ID(id) : API_ENDPOINTS.USERS.BASE,
-        method: id ? "PUT" : "POST",
-        body: data,
-      }),
-      invalidatesTags: (_r, _e, { id }) =>
-        id ? [{ type: "User", id }, "User"] : ["User"],
-    }),
+    saveUser: builder.mutation<User, { id?: number; data: CreateUserDto | Partial<CreateUserDto> }>(
+      {
+        query: ({ id, data }) => ({
+          url: id ? API_ENDPOINTS.USERS.BY_ID(id) : API_ENDPOINTS.USERS.BASE,
+          method: id ? "PUT" : "POST",
+          body: data,
+        }),
+        invalidatesTags: (_r, _e, { id }) => (id ? [{ type: "User", id }, "User"] : ["User"]),
+      }
+    ),
 
     deleteUser: builder.mutation<void, number>({
       query: (id) => ({
@@ -38,9 +36,5 @@ export const usersApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const {
-  useGetUsersQuery,
-  useGetUserByIdQuery,
-  useSaveUserMutation,
-  useDeleteUserMutation,
-} = usersApi;
+export const { useGetUsersQuery, useGetUserByIdQuery, useSaveUserMutation, useDeleteUserMutation } =
+  usersApi;

@@ -24,4 +24,3 @@ export interface CreateParentDto {
   occupation?: string;
   userId: number;
 }
-

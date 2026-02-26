@@ -27,8 +27,16 @@ const RoleForm: React.FC = () => {
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveRole({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateRoleDto }).unwrap();
-      dispatch(showSnackbar({ message: isEdit ? "Role updated successfully" : "Role created successfully", severity: "success" }));
+      await saveRole({
+        id: isEdit ? Number(id) : undefined,
+        data: values as unknown as CreateRoleDto,
+      }).unwrap();
+      dispatch(
+        showSnackbar({
+          message: isEdit ? "Role updated successfully" : "Role created successfully",
+          severity: "success",
+        })
+      );
       navigate(ROUTES.ROLES.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));

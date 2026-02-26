@@ -36,7 +36,11 @@ const ExamDetail: React.FC = () => {
             Exam Details
           </Typography>
         </Box>
-        <Button startIcon={<Edit />} variant="contained" onClick={() => navigate(`/exams/${id}/edit`)}>
+        <Button
+          startIcon={<Edit />}
+          variant="contained"
+          onClick={() => navigate(`/exams/${id}/edit`)}
+        >
           Edit
         </Button>
       </Box>

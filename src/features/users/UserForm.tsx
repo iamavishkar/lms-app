@@ -28,7 +28,8 @@ const UserForm: React.FC = () => {
   const fields = useMemo(
     () =>
       userFormFields.map((f) => {
-        if (f.name === "roleId") return { ...f, options: roles.map((r) => ({ label: r.name, value: r.id })) };
+        if (f.name === "roleId")
+          return { ...f, options: roles.map((r) => ({ label: r.name, value: r.id })) };
         if (f.name === "password") return { ...f, hidden: isEdit, required: !isEdit };
         return f;
       }),
@@ -36,13 +37,27 @@ const UserForm: React.FC = () => {
   );
 
   const editValues = user
-    ? { name: user.name, email: user.email, password: "", roleId: user.role?.id, isActive: user.isActive }
+    ? {
+        name: user.name,
+        email: user.email,
+        password: "",
+        roleId: user.role?.id,
+        isActive: user.isActive,
+      }
     : undefined;
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveUser({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateUserDto }).unwrap();
-      dispatch(showSnackbar({ message: isEdit ? "User updated successfully" : "User created successfully", severity: "success" }));
+      await saveUser({
+        id: isEdit ? Number(id) : undefined,
+        data: values as unknown as CreateUserDto,
+      }).unwrap();
+      dispatch(
+        showSnackbar({
+          message: isEdit ? "User updated successfully" : "User created successfully",
+          severity: "success",
+        })
+      );
       navigate(ROUTES.USERS.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));

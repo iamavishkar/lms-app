@@ -23,7 +23,9 @@ const StudentForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: student, isLoading: loadingStudent } = useGetStudentByIdQuery(Number(id), { skip: !isEdit });
+  const { data: student, isLoading: loadingStudent } = useGetStudentByIdQuery(Number(id), {
+    skip: !isEdit,
+  });
   const { data: users = [] } = useGetUsersQuery();
   const { data: classes = [] } = useGetClassesQuery();
   const { data: parents = [] } = useGetParentsQuery();
@@ -32,13 +34,23 @@ const StudentForm: React.FC = () => {
   const fields = useMemo(
     () =>
       studentFormFields.map((f) => {
-        if (f.name === "userId") return { ...f, options: users.map((u) => ({ label: u.name, value: u.id })) };
+        if (f.name === "userId")
+          return { ...f, options: users.map((u) => ({ label: u.name, value: u.id })) };
         if (f.name === "classId")
-          return { ...f, options: [{ label: "None", value: "" }, ...classes.map((c) => ({ label: c.name, value: c.id }))] };
+          return {
+            ...f,
+            options: [
+              { label: "None", value: "" },
+              ...classes.map((c) => ({ label: c.name, value: c.id })),
+            ],
+          };
         if (f.name === "parentId")
           return {
             ...f,
-            options: [{ label: "None", value: "" }, ...parents.map((p) => ({ label: p.user?.name ?? `Parent #${p.id}`, value: p.id }))],
+            options: [
+              { label: "None", value: "" },
+              ...parents.map((p) => ({ label: p.user?.name ?? `Parent #${p.id}`, value: p.id })),
+            ],
           };
         return f;
       }),
@@ -60,8 +72,16 @@ const StudentForm: React.FC = () => {
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveStudent({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateStudentDto }).unwrap();
-      dispatch(showSnackbar({ message: isEdit ? "Student updated successfully" : "Student created successfully", severity: "success" }));
+      await saveStudent({
+        id: isEdit ? Number(id) : undefined,
+        data: values as unknown as CreateStudentDto,
+      }).unwrap();
+      dispatch(
+        showSnackbar({
+          message: isEdit ? "Student updated successfully" : "Student created successfully",
+          severity: "success",
+        })
+      );
       navigate(ROUTES.STUDENTS.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));
@@ -77,7 +97,9 @@ const StudentForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={fields}
-            initialValues={(editValues || studentInitialValues) as unknown as Record<string, unknown>}
+            initialValues={
+              (editValues || studentInitialValues) as unknown as Record<string, unknown>
+            }
             validationSchema={studentFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.STUDENTS.LIST)}

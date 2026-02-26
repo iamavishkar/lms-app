@@ -13,7 +13,11 @@ import { getErrorMessage } from "../../utils/helpers";
 const SubjectList: React.FC = () => {
   const navigate = useNavigate();
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" as "success" | "error" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
 
   const { data: subjects = [], isLoading, error } = useGetSubjectsQuery();
   const [deleteSubject] = useDeleteSubjectMutation();
@@ -39,14 +43,30 @@ const SubjectList: React.FC = () => {
       renderCell: ({ value }) => <Chip label={value} size="small" color="secondary" />,
     },
     { field: "name", headerName: "Name", flex: 1 },
-    { field: "description", headerName: "Description", flex: 2, valueGetter: (value) => value || "-" },
+    {
+      field: "description",
+      headerName: "Description",
+      flex: 2,
+      renderCell: ({ value }) => <>{value || "-"}</>,
+    },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
       getActions: ({ id }) => [
-        <GridActionsCellItem key="edit" icon={<Edit />} label="Edit" onClick={() => navigate(`/subjects/${id}/edit`)} />,
-        <GridActionsCellItem key="delete" icon={<Delete />} label="Delete" onClick={() => setDeleteId(id as number)} color="error" />,
+        <GridActionsCellItem
+          key="edit"
+          icon={<Edit />}
+          label="Edit"
+          onClick={() => navigate(`/subjects/${id}/edit`)}
+        />,
+        <GridActionsCellItem
+          key="delete"
+          icon={<Delete />}
+          label="Delete"
+          onClick={() => setDeleteId(id as number)}
+          color="error"
+        />,
       ],
     },
   ];

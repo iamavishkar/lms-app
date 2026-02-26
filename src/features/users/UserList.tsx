@@ -13,7 +13,11 @@ import { getErrorMessage } from "../../utils/helpers";
 const UserList: React.FC = () => {
   const navigate = useNavigate();
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" as "success" | "error" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
 
   const { data: users = [], isLoading, error } = useGetUsersQuery();
   const [deleteUser] = useDeleteUserMutation();
@@ -38,22 +42,46 @@ const UserList: React.FC = () => {
       field: "role",
       headerName: "Role",
       flex: 1,
-      renderCell: ({ value }) => <Chip label={value?.name} size="small" color="primary" variant="outlined" />,
+      renderCell: ({ value }) => (
+        <Chip label={value?.name} size="small" color="primary" variant="outlined" />
+      ),
     },
     {
       field: "isActive",
       headerName: "Status",
       width: 120,
-      renderCell: ({ value }) => <Chip label={value ? "Active" : "Inactive"} size="small" color={value ? "success" : "default"} />,
+      renderCell: ({ value }) => (
+        <Chip
+          label={value ? "Active" : "Inactive"}
+          size="small"
+          color={value ? "success" : "default"}
+        />
+      ),
     },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
       getActions: ({ id }) => [
-        <GridActionsCellItem key="view" icon={<Visibility />} label="View" onClick={() => navigate(`/users/${id}`)} />,
-        <GridActionsCellItem key="edit" icon={<Edit />} label="Edit" onClick={() => navigate(`/users/${id}/edit`)} />,
-        <GridActionsCellItem key="delete" icon={<Delete />} label="Delete" onClick={() => setDeleteId(id as number)} color="error" />,
+        <GridActionsCellItem
+          key="view"
+          icon={<Visibility />}
+          label="View"
+          onClick={() => navigate(`/users/${id}`)}
+        />,
+        <GridActionsCellItem
+          key="edit"
+          icon={<Edit />}
+          label="Edit"
+          onClick={() => navigate(`/users/${id}/edit`)}
+        />,
+        <GridActionsCellItem
+          key="delete"
+          icon={<Delete />}
+          label="Delete"
+          onClick={() => setDeleteId(id as number)}
+          color="error"
+        />,
       ],
     },
   ];

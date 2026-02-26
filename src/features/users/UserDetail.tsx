@@ -23,10 +23,19 @@ const UserDetail: React.FC = () => {
   ];
 
   const chipFields = [
-    { label: "Role", node: <Chip label={user.role?.name} color="primary" variant="outlined" />, md: 6 },
+    {
+      label: "Role",
+      node: <Chip label={user.role?.name} color="primary" variant="outlined" />,
+      md: 6,
+    },
     {
       label: "Status",
-      node: <Chip label={user.isActive ? "Active" : "Inactive"} color={user.isActive ? "success" : "default"} />,
+      node: (
+        <Chip
+          label={user.isActive ? "Active" : "Inactive"}
+          color={user.isActive ? "success" : "default"}
+        />
+      ),
       md: 6,
     },
   ];
@@ -42,7 +51,11 @@ const UserDetail: React.FC = () => {
             User Details
           </Typography>
         </Box>
-        <Button startIcon={<Edit />} variant="contained" onClick={() => navigate(`/users/${id}/edit`)}>
+        <Button
+          startIcon={<Edit />}
+          variant="contained"
+          onClick={() => navigate(`/users/${id}/edit`)}
+        >
           Edit
         </Button>
       </Box>

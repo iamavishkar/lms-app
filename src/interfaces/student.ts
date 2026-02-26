@@ -27,4 +27,3 @@ export interface CreateStudentDto {
   classId?: number;
   parentId?: number;
 }
-

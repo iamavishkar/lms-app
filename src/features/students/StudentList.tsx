@@ -13,7 +13,11 @@ import { getErrorMessage } from "../../utils/helpers";
 const StudentList: React.FC = () => {
   const navigate = useNavigate();
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" as "success" | "error" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
 
   const { data: students = [], isLoading, error } = useGetStudentsQuery();
   const [deleteStudent] = useDeleteStudentMutation();
@@ -38,18 +42,53 @@ const StudentList: React.FC = () => {
       width: 150,
       renderCell: ({ value }) => <Chip label={value} size="small" />,
     },
-    { field: "name", headerName: "Name", flex: 1, valueGetter: (_, row) => row.user?.name },
+    {
+      field: "user",
+      headerName: "Name",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: ({ row }) => <>{row.user?.name}</>,
+    },
     { field: "gender", headerName: "Gender", width: 100 },
-    { field: "class", headerName: "Class", width: 120, valueGetter: (_, row) => row.class?.name || "-" },
-    { field: "phone", headerName: "Phone", width: 130, valueGetter: (value) => value || "-" },
+    {
+      field: "class",
+      headerName: "Class",
+      width: 120,
+      sortable: false,
+      filterable: false,
+      renderCell: ({ row }) => <>{row.class?.name || "-"}</>,
+    },
+    {
+      field: "phone",
+      headerName: "Phone",
+      width: 130,
+      renderCell: ({ value }) => <>{value || "-"}</>,
+    },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
       getActions: ({ id }) => [
-        <GridActionsCellItem key="view" icon={<Visibility />} label="View" onClick={() => navigate(`/students/${id}`)} />,
-        <GridActionsCellItem key="edit" icon={<Edit />} label="Edit" onClick={() => navigate(`/students/${id}/edit`)} />,
-        <GridActionsCellItem key="delete" icon={<Delete />} label="Delete" onClick={() => setDeleteId(id as number)} color="error" />,
+        <GridActionsCellItem
+          key="view"
+          icon={<Visibility />}
+          label="View"
+          onClick={() => navigate(`/students/${id}`)}
+        />,
+        <GridActionsCellItem
+          key="edit"
+          icon={<Edit />}
+          label="Edit"
+          onClick={() => navigate(`/students/${id}/edit`)}
+        />,
+        <GridActionsCellItem
+          key="delete"
+          icon={<Delete />}
+          label="Delete"
+          onClick={() => setDeleteId(id as number)}
+          color="error"
+        />,
       ],
     },
   ];

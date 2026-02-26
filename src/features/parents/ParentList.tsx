@@ -13,7 +13,11 @@ import { getErrorMessage } from "../../utils/helpers";
 const ParentList: React.FC = () => {
   const navigate = useNavigate();
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" as "success" | "error" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
 
   const { data: parents = [], isLoading, error } = useGetParentsQuery();
   const [deleteParent] = useDeleteParentMutation();
@@ -32,19 +36,66 @@ const ParentList: React.FC = () => {
   if (error) return <ErrorAlert message="Failed to load parents" />;
 
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", flex: 1, valueGetter: (_, row) => row.user?.name },
-    { field: "email", headerName: "Email", flex: 1, valueGetter: (_, row) => row.user?.email },
-    { field: "phone", headerName: "Phone", width: 130, valueGetter: (value) => value || "-" },
-    { field: "occupation", headerName: "Occupation", flex: 1, valueGetter: (value) => value || "-" },
-    { field: "children", headerName: "Children", width: 90, valueGetter: (_, row) => row.students?.length ?? 0 },
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: ({ row }) => <>{row.user?.name}</>,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: ({ row }) => <>{row.user?.email}</>,
+    },
+    {
+      field: "phone",
+      headerName: "Phone",
+      width: 130,
+      renderCell: ({ value }) => <>{value || "-"}</>,
+    },
+    {
+      field: "occupation",
+      headerName: "Occupation",
+      flex: 1,
+      renderCell: ({ value }) => <>{value || "-"}</>,
+    },
+    {
+      field: "students",
+      headerName: "Children",
+      width: 90,
+      sortable: false,
+      filterable: false,
+      renderCell: ({ row }) => <>{row.students?.length ?? 0}</>,
+    },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
       getActions: ({ id }) => [
-        <GridActionsCellItem key="view" icon={<Visibility />} label="View" onClick={() => navigate(`/parents/${id}`)} />,
-        <GridActionsCellItem key="edit" icon={<Edit />} label="Edit" onClick={() => navigate(`/parents/${id}/edit`)} />,
-        <GridActionsCellItem key="delete" icon={<Delete />} label="Delete" onClick={() => setDeleteId(id as number)} color="error" />,
+        <GridActionsCellItem
+          key="view"
+          icon={<Visibility />}
+          label="View"
+          onClick={() => navigate(`/parents/${id}`)}
+        />,
+        <GridActionsCellItem
+          key="edit"
+          icon={<Edit />}
+          label="Edit"
+          onClick={() => navigate(`/parents/${id}/edit`)}
+        />,
+        <GridActionsCellItem
+          key="delete"
+          icon={<Delete />}
+          label="Delete"
+          onClick={() => setDeleteId(id as number)}
+          color="error"
+        />,
       ],
     },
   ];

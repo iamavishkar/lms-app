@@ -19,14 +19,11 @@ export const classesApi = apiSlice.injectEndpoints({
       { id?: number; data: CreateClassDto | Partial<CreateClassDto> }
     >({
       query: ({ id, data }) => ({
-        url: id
-          ? API_ENDPOINTS.CLASSES.BY_ID(id)
-          : API_ENDPOINTS.CLASSES.BASE,
+        url: id ? API_ENDPOINTS.CLASSES.BY_ID(id) : API_ENDPOINTS.CLASSES.BASE,
         method: id ? "PUT" : "POST",
         body: data,
       }),
-      invalidatesTags: (_r, _e, { id }) =>
-        id ? [{ type: "Class", id }, "Class"] : ["Class"],
+      invalidatesTags: (_r, _e, { id }) => (id ? [{ type: "Class", id }, "Class"] : ["Class"]),
     }),
 
     deleteClass: builder.mutation<void, number>({

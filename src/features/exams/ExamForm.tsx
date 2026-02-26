@@ -30,8 +30,10 @@ const ExamForm: React.FC = () => {
   const fields = useMemo(
     () =>
       examFormFields.map((f) => {
-        if (f.name === "classId") return { ...f, options: classes.map((c) => ({ label: c.name, value: c.id })) };
-        if (f.name === "subjectId") return { ...f, options: subjects.map((s) => ({ label: s.name, value: s.id })) };
+        if (f.name === "classId")
+          return { ...f, options: classes.map((c) => ({ label: c.name, value: c.id })) };
+        if (f.name === "subjectId")
+          return { ...f, options: subjects.map((s) => ({ label: s.name, value: s.id })) };
         return f;
       }),
     [classes, subjects]
@@ -51,8 +53,16 @@ const ExamForm: React.FC = () => {
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveExam({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateExamDto }).unwrap();
-      dispatch(showSnackbar({ message: isEdit ? "Exam updated successfully" : "Exam created successfully", severity: "success" }));
+      await saveExam({
+        id: isEdit ? Number(id) : undefined,
+        data: values as unknown as CreateExamDto,
+      }).unwrap();
+      dispatch(
+        showSnackbar({
+          message: isEdit ? "Exam updated successfully" : "Exam created successfully",
+          severity: "success",
+        })
+      );
       navigate(ROUTES.EXAMS.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));

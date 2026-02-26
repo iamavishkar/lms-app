@@ -22,7 +22,9 @@ const ResultForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: result, isLoading: loadingResult } = useGetResultByIdQuery(Number(id), { skip: !isEdit });
+  const { data: result, isLoading: loadingResult } = useGetResultByIdQuery(Number(id), {
+    skip: !isEdit,
+  });
   const { data: students = [] } = useGetStudentsQuery();
   const { data: exams = [] } = useGetExamsQuery();
   const [saveResult, { isLoading }] = useSaveResultMutation();
@@ -31,8 +33,15 @@ const ResultForm: React.FC = () => {
     () =>
       resultFormFields.map((f) => {
         if (f.name === "studentId")
-          return { ...f, options: students.map((s) => ({ label: s.user?.name ?? s.enrollmentNumber, value: s.id })) };
-        if (f.name === "examId") return { ...f, options: exams.map((e) => ({ label: e.name, value: e.id })) };
+          return {
+            ...f,
+            options: students.map((s) => ({
+              label: s.user?.name ?? s.enrollmentNumber,
+              value: s.id,
+            })),
+          };
+        if (f.name === "examId")
+          return { ...f, options: exams.map((e) => ({ label: e.name, value: e.id })) };
         return f;
       }),
     [students, exams]
@@ -50,8 +59,16 @@ const ResultForm: React.FC = () => {
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveResult({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateResultDto }).unwrap();
-      dispatch(showSnackbar({ message: isEdit ? "Result updated successfully" : "Result created successfully", severity: "success" }));
+      await saveResult({
+        id: isEdit ? Number(id) : undefined,
+        data: values as unknown as CreateResultDto,
+      }).unwrap();
+      dispatch(
+        showSnackbar({
+          message: isEdit ? "Result updated successfully" : "Result created successfully",
+          severity: "success",
+        })
+      );
       navigate(ROUTES.RESULTS.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));
@@ -67,7 +84,9 @@ const ResultForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={fields}
-            initialValues={(editValues || resultInitialValues) as unknown as Record<string, unknown>}
+            initialValues={
+              (editValues || resultInitialValues) as unknown as Record<string, unknown>
+            }
             validationSchema={resultFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.RESULTS.LIST)}

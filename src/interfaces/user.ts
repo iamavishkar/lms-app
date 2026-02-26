@@ -17,4 +17,3 @@ export interface CreateUserDto {
   roleId: number;
   isActive?: boolean;
 }
-

@@ -23,4 +23,3 @@ export interface CreateExamDto {
   subjectId: number;
   classId: number;
 }
-

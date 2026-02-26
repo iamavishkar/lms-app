@@ -45,15 +45,9 @@ const SubjectList = lazy(() => import("./features/subjects/SubjectList"));
 const SubjectForm = lazy(() => import("./features/subjects/SubjectForm"));
 
 // Attendance
-const AttendanceList = lazy(
-  () => import("./features/attendance/AttendanceList")
-);
-const MarkAttendance = lazy(
-  () => import("./features/attendance/MarkAttendance")
-);
-const AttendanceReport = lazy(
-  () => import("./features/attendance/AttendanceReport")
-);
+const AttendanceList = lazy(() => import("./features/attendance/AttendanceList"));
+const MarkAttendance = lazy(() => import("./features/attendance/MarkAttendance"));
+const AttendanceReport = lazy(() => import("./features/attendance/AttendanceReport"));
 
 // Exams
 const ExamList = lazy(() => import("./features/exams/ExamList"));
@@ -157,12 +151,7 @@ const App: React.FC = () => {
         <Route
           path={ROUTES.UNAUTHORIZED}
           element={
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              minHeight="100vh"
-            >
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
               <Box textAlign="center">
                 <Typography variant="h4" gutterBottom>
                   403 — Unauthorized
@@ -179,12 +168,7 @@ const App: React.FC = () => {
         <Route
           path="*"
           element={
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              minHeight="100vh"
-            >
+            <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
               <Box textAlign="center">
                 <Typography variant="h4" gutterBottom>
                   404 — Page Not Found

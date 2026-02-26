@@ -1,10 +1,10 @@
-import React from 'react';
-import { Grid, Typography, Box, Card, CardContent } from '@mui/material';
-import { Class, Subject, EventNote, Assignment } from '@mui/icons-material';
-import StatsCard from '../../components/common/StatsCard';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetDashboardStatsQuery } from '../../app/api/dashboardApi';
+import React from "react";
+import { Grid, Typography, Box, Card, CardContent } from "@mui/material";
+import { Class, Subject, EventNote, Assignment } from "@mui/icons-material";
+import StatsCard from "../../components/common/StatsCard";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+import ErrorAlert from "../../components/common/ErrorAlert";
+import { useGetDashboardStatsQuery } from "../../app/api/dashboardApi";
 
 const TeacherDashboard: React.FC = () => {
   const { data: stats, isLoading, error } = useGetDashboardStatsQuery();
@@ -61,7 +61,8 @@ const TeacherDashboard: React.FC = () => {
                 Quick Actions
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Use the sidebar to navigate to your classes, mark attendance, manage exams and results.
+                Use the sidebar to navigate to your classes, mark attendance, manage exams and
+                results.
               </Typography>
             </CardContent>
           </Card>

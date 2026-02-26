@@ -14,18 +14,16 @@ export const rolesApi = apiSlice.injectEndpoints({
       providesTags: (_r, _e, id) => [{ type: "Role", id }],
     }),
 
-    saveRole: builder.mutation<
-      Role,
-      { id?: number; data: CreateRoleDto | Partial<CreateRoleDto> }
-    >({
-      query: ({ id, data }) => ({
-        url: id ? API_ENDPOINTS.ROLES.BY_ID(id) : API_ENDPOINTS.ROLES.BASE,
-        method: id ? "PUT" : "POST",
-        body: data,
-      }),
-      invalidatesTags: (_r, _e, { id }) =>
-        id ? [{ type: "Role", id }, "Role"] : ["Role"],
-    }),
+    saveRole: builder.mutation<Role, { id?: number; data: CreateRoleDto | Partial<CreateRoleDto> }>(
+      {
+        query: ({ id, data }) => ({
+          url: id ? API_ENDPOINTS.ROLES.BY_ID(id) : API_ENDPOINTS.ROLES.BASE,
+          method: id ? "PUT" : "POST",
+          body: data,
+        }),
+        invalidatesTags: (_r, _e, { id }) => (id ? [{ type: "Role", id }, "Role"] : ["Role"]),
+      }
+    ),
 
     deleteRole: builder.mutation<void, number>({
       query: (id) => ({
@@ -37,9 +35,5 @@ export const rolesApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const {
-  useGetRolesQuery,
-  useGetRoleByIdQuery,
-  useSaveRoleMutation,
-  useDeleteRoleMutation,
-} = rolesApi;
+export const { useGetRolesQuery, useGetRoleByIdQuery, useSaveRoleMutation, useDeleteRoleMutation } =
+  rolesApi;

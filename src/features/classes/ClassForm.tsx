@@ -21,7 +21,9 @@ const ClassForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: cls, isLoading: loadingClass } = useGetClassByIdQuery(Number(id), { skip: !isEdit });
+  const { data: cls, isLoading: loadingClass } = useGetClassByIdQuery(Number(id), {
+    skip: !isEdit,
+  });
   const { data: teachers = [] } = useGetTeachersQuery();
   const [saveClass, { isLoading }] = useSaveClassMutation();
 
@@ -33,7 +35,10 @@ const ClassForm: React.FC = () => {
               ...f,
               options: [
                 { label: "None", value: "" },
-                ...teachers.map((t) => ({ label: t.user?.name ?? `Teacher #${t.id}`, value: t.id })),
+                ...teachers.map((t) => ({
+                  label: t.user?.name ?? `Teacher #${t.id}`,
+                  value: t.id,
+                })),
               ],
             }
           : f
@@ -42,13 +47,26 @@ const ClassForm: React.FC = () => {
   );
 
   const editValues = cls
-    ? { name: cls.name, section: cls.section ?? "", academicYear: cls.academicYear, teacherId: cls.teacher?.id }
+    ? {
+        name: cls.name,
+        section: cls.section ?? "",
+        academicYear: cls.academicYear,
+        teacherId: cls.teacher?.id,
+      }
     : undefined;
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveClass({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateClassDto }).unwrap();
-      dispatch(showSnackbar({ message: isEdit ? "Class updated successfully" : "Class created successfully", severity: "success" }));
+      await saveClass({
+        id: isEdit ? Number(id) : undefined,
+        data: values as unknown as CreateClassDto,
+      }).unwrap();
+      dispatch(
+        showSnackbar({
+          message: isEdit ? "Class updated successfully" : "Class created successfully",
+          severity: "success",
+        })
+      );
       navigate(ROUTES.CLASSES.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));

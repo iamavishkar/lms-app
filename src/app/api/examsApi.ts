@@ -14,18 +14,16 @@ export const examsApi = apiSlice.injectEndpoints({
       providesTags: (_r, _e, id) => [{ type: "Exam", id }],
     }),
 
-    saveExam: builder.mutation<
-      Exam,
-      { id?: number; data: CreateExamDto | Partial<CreateExamDto> }
-    >({
-      query: ({ id, data }) => ({
-        url: id ? API_ENDPOINTS.EXAMS.BY_ID(id) : API_ENDPOINTS.EXAMS.BASE,
-        method: id ? "PUT" : "POST",
-        body: data,
-      }),
-      invalidatesTags: (_r, _e, { id }) =>
-        id ? [{ type: "Exam", id }, "Exam"] : ["Exam"],
-    }),
+    saveExam: builder.mutation<Exam, { id?: number; data: CreateExamDto | Partial<CreateExamDto> }>(
+      {
+        query: ({ id, data }) => ({
+          url: id ? API_ENDPOINTS.EXAMS.BY_ID(id) : API_ENDPOINTS.EXAMS.BASE,
+          method: id ? "PUT" : "POST",
+          body: data,
+        }),
+        invalidatesTags: (_r, _e, { id }) => (id ? [{ type: "Exam", id }, "Exam"] : ["Exam"]),
+      }
+    ),
 
     deleteExam: builder.mutation<void, number>({
       query: (id) => ({
@@ -37,9 +35,5 @@ export const examsApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const {
-  useGetExamsQuery,
-  useGetExamByIdQuery,
-  useSaveExamMutation,
-  useDeleteExamMutation,
-} = examsApi;
+export const { useGetExamsQuery, useGetExamByIdQuery, useSaveExamMutation, useDeleteExamMutation } =
+  examsApi;

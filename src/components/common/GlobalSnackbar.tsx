@@ -5,9 +5,7 @@ import { hideSnackbar } from "../../app/store/uiSlice";
 
 export default function GlobalSnackbar() {
   const dispatch = useDispatch();
-  const { open, message, severity } = useSelector(
-    (state: RootState) => state.ui.snackbar
-  );
+  const { open, message, severity } = useSelector((state: RootState) => state.ui.snackbar);
 
   const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") return;

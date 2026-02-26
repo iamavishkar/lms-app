@@ -24,14 +24,11 @@ export const resultsApi = apiSlice.injectEndpoints({
       { id?: number; data: CreateResultDto | Partial<CreateResultDto> }
     >({
       query: ({ id, data }) => ({
-        url: id
-          ? API_ENDPOINTS.RESULTS.BY_ID(id)
-          : API_ENDPOINTS.RESULTS.BASE,
+        url: id ? API_ENDPOINTS.RESULTS.BY_ID(id) : API_ENDPOINTS.RESULTS.BASE,
         method: id ? "PUT" : "POST",
         body: data,
       }),
-      invalidatesTags: (_r, _e, { id }) =>
-        id ? [{ type: "Result", id }, "Result"] : ["Result"],
+      invalidatesTags: (_r, _e, { id }) => (id ? [{ type: "Result", id }, "Result"] : ["Result"]),
     }),
 
     deleteResult: builder.mutation<void, number>({

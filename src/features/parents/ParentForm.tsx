@@ -21,23 +21,43 @@ const ParentForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: parent, isLoading: loadingParent } = useGetParentByIdQuery(Number(id), { skip: !isEdit });
+  const { data: parent, isLoading: loadingParent } = useGetParentByIdQuery(Number(id), {
+    skip: !isEdit,
+  });
   const { data: users = [] } = useGetUsersQuery();
   const [saveParent, { isLoading }] = useSaveParentMutation();
 
   const fields = useMemo(
-    () => parentFormFields.map((f) => (f.name === "userId" ? { ...f, options: users.map((u) => ({ label: u.name, value: u.id })) } : f)),
+    () =>
+      parentFormFields.map((f) =>
+        f.name === "userId"
+          ? { ...f, options: users.map((u) => ({ label: u.name, value: u.id })) }
+          : f
+      ),
     [users]
   );
 
   const editValues = parent
-    ? { phone: parent.phone ?? "", address: parent.address ?? "", occupation: parent.occupation ?? "", userId: parent.user?.id }
+    ? {
+        phone: parent.phone ?? "",
+        address: parent.address ?? "",
+        occupation: parent.occupation ?? "",
+        userId: parent.user?.id,
+      }
     : undefined;
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveParent({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateParentDto }).unwrap();
-      dispatch(showSnackbar({ message: isEdit ? "Parent updated successfully" : "Parent created successfully", severity: "success" }));
+      await saveParent({
+        id: isEdit ? Number(id) : undefined,
+        data: values as unknown as CreateParentDto,
+      }).unwrap();
+      dispatch(
+        showSnackbar({
+          message: isEdit ? "Parent updated successfully" : "Parent created successfully",
+          severity: "success",
+        })
+      );
       navigate(ROUTES.PARENTS.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));
@@ -53,7 +73,9 @@ const ParentForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={fields}
-            initialValues={(editValues || parentInitialValues) as unknown as Record<string, unknown>}
+            initialValues={
+              (editValues || parentInitialValues) as unknown as Record<string, unknown>
+            }
             validationSchema={parentFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.PARENTS.LIST)}

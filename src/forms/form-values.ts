@@ -1,12 +1,30 @@
-import type { CreateRoleDto } from "../interfaces/role";
-import type { CreateStudentDto } from "../interfaces/student";
-import type { CreateTeacherDto } from "../interfaces/teacher";
-import type { CreateParentDto } from "../interfaces/parent";
-import type { CreateClassDto } from "../interfaces/class";
-import type { CreateSubjectDto } from "../interfaces/subject";
-import type { CreateExamDto } from "../interfaces/exam";
-import type { CreateResultDto } from "../interfaces/result";
+import type { Role } from "../interfaces/role";
+import type { User } from "../interfaces/user";
+import type { Student } from "../interfaces/student";
+import type { Teacher } from "../interfaces/teacher";
+import type { Parent } from "../interfaces/parent";
+import type { Class } from "../interfaces/class";
+import type { Subject } from "../interfaces/subject";
+import type { Exam } from "../interfaces/exam";
+import type { Result } from "../interfaces/result";
 import type { LoginCredentials, RegisterData } from "../interfaces/auth";
+import type { Attendance } from "../interfaces/attendance";
+
+type UserFormValues = Omit<User, "role"> & { password: string; roleId?: number };
+type StudentFormValues = Omit<Student, "user" | "class" | "parent"> & {
+  userId?: number;
+  classId?: number;
+  parentId?: number;
+};
+type TeacherFormValues = Omit<Teacher, "user" | "subjects"> & { userId?: number };
+type ParentFormValues = Omit<Parent, "user" | "students"> & { userId?: number };
+type ClassFormValues = Omit<Class, "teacher" | "students" | "subjects"> & { teacherId?: number };
+type ExamFormValues = Omit<Exam, "subject" | "class"> & { subjectId?: number; classId?: number };
+type ResultFormValues = Omit<Result, "student" | "exam"> & { studentId?: number; examId?: number };
+type AttendanceFormValues = Omit<Attendance, "student" | "class" | "markedBy"> & {
+  studentId?: number;
+  classId?: number;
+};
 
 export const loginInitialValues: LoginCredentials = {
   email: "",
@@ -20,73 +38,110 @@ export const registerInitialValues: RegisterData = {
   roleId: undefined,
 };
 
-export const userInitialValues = {
+export const userInitialValues: UserFormValues = {
+  id: 0,
   name: "",
   email: "",
   password: "",
-  roleId: undefined as number | undefined,
+  roleId: undefined,
   isActive: true,
+  createdAt: "",
+  updatedAt: "",
 };
 
-export const roleInitialValues: CreateRoleDto = {
+export const roleInitialValues: Role = {
+  id: 0,
   name: "",
   description: "",
+  createdAt: "",
+  updatedAt: "",
 };
 
-export const studentInitialValues: CreateStudentDto = {
+export const studentInitialValues: StudentFormValues = {
+  id: 0,
   enrollmentNumber: "",
   dateOfBirth: "",
   gender: "",
   address: "",
   phone: "",
-  userId: undefined as unknown as number,
+  userId: undefined,
   classId: undefined,
   parentId: undefined,
+  createdAt: "",
+  updatedAt: "",
 };
 
-export const teacherInitialValues: CreateTeacherDto = {
+export const teacherInitialValues: TeacherFormValues = {
+  id: 0,
   employeeId: "",
   qualification: "",
   specialization: "",
   phone: "",
   address: "",
-  userId: undefined as unknown as number,
+  userId: undefined,
+  createdAt: "",
+  updatedAt: "",
 };
 
-export const parentInitialValues: CreateParentDto = {
+export const parentInitialValues: ParentFormValues = {
+  id: 0,
   phone: "",
   address: "",
   occupation: "",
-  userId: undefined as unknown as number,
+  userId: undefined,
+  createdAt: "",
+  updatedAt: "",
 };
 
-export const classInitialValues: CreateClassDto = {
+export const classInitialValues: ClassFormValues = {
+  id: 0,
   name: "",
   section: "",
   academicYear: "",
   teacherId: undefined,
+  createdAt: "",
+  updatedAt: "",
 };
 
-export const subjectInitialValues: CreateSubjectDto = {
+export const subjectInitialValues: Omit<Subject, "classes" | "teachers"> = {
+  id: 0,
   name: "",
   code: "",
   description: "",
+  createdAt: "",
+  updatedAt: "",
 };
 
-export const examInitialValues: CreateExamDto = {
+export const examInitialValues: ExamFormValues = {
+  id: 0,
   name: "",
   type: "",
   date: "",
   duration: 60,
   totalMarks: 100,
-  subjectId: undefined as unknown as number,
-  classId: undefined as unknown as number,
+  subjectId: undefined,
+  classId: undefined,
+  createdAt: "",
+  updatedAt: "",
 };
 
-export const resultInitialValues: CreateResultDto = {
+export const resultInitialValues: ResultFormValues = {
+  id: 0,
   marksObtained: 0,
   grade: "",
   remarks: "",
-  studentId: undefined as unknown as number,
-  examId: undefined as unknown as number,
+  studentId: undefined,
+  examId: undefined,
+  createdAt: "",
+  updatedAt: "",
+};
+
+export const attendanceInitialValues: AttendanceFormValues = {
+  id: 0,
+  date: "",
+  status: "present",
+  studentId: undefined,
+  classId: undefined,
+  createdAt: "",
+  updatedAt: "",
 };

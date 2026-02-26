@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from "react";
 import {
   Box,
   Card,
@@ -11,19 +11,23 @@ import {
   ListItemIcon,
   ListItemText,
   Alert,
-} from '@mui/material';
-import { CloudUpload, InsertDriveFile, CheckCircle } from '@mui/icons-material';
-import PageHeader from '../../components/common/PageHeader';
-import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useUploadFileMutation } from '../../app/api/filesApi';
-import { getErrorMessage } from '../../utils/helpers';
-import { FileUploadResponse } from '../../interfaces';
+} from "@mui/material";
+import { CloudUpload, InsertDriveFile, CheckCircle } from "@mui/icons-material";
+import PageHeader from "../../components/common/PageHeader";
+import NotificationSnackbar from "../../components/common/NotificationSnackbar";
+import { useUploadFileMutation } from "../../app/api/filesApi";
+import { getErrorMessage } from "../../utils/helpers";
+import { FileUploadResponse } from "../../interfaces";
 
 const FileUpload: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadedFiles, setUploadedFiles] = useState<FileUploadResponse[]>([]);
   const [dragOver, setDragOver] = useState(false);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
 
   const [uploadFile, { isLoading }] = useUploadFileMutation();
 
@@ -31,13 +35,17 @@ const FileUpload: React.FC = () => {
     if (!files || files.length === 0) return;
     for (const file of Array.from(files)) {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append("file", file);
       try {
         const result = await uploadFile(formData).unwrap();
         setUploadedFiles((prev) => [...prev, result]);
-        setSnackbar({ open: true, message: `${file.name} uploaded successfully`, severity: 'success' });
+        setSnackbar({
+          open: true,
+          message: `${file.name} uploaded successfully`,
+          severity: "success",
+        });
       } catch (err) {
-        setSnackbar({ open: true, message: getErrorMessage(err), severity: 'error' });
+        setSnackbar({ open: true, message: getErrorMessage(err), severity: "error" });
       }
     }
   };
@@ -54,19 +62,22 @@ const FileUpload: React.FC = () => {
 
       <Card
         sx={{
-          border: '2px dashed',
-          borderColor: dragOver ? 'primary.main' : 'divider',
-          cursor: 'pointer',
-          transition: 'border-color 0.2s',
+          border: "2px dashed",
+          borderColor: dragOver ? "primary.main" : "divider",
+          cursor: "pointer",
+          transition: "border-color 0.2s",
           mb: 3,
         }}
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragOver(true);
+        }}
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
       >
-        <CardContent sx={{ textAlign: 'center', py: 6 }}>
-          <CloudUpload sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
+        <CardContent sx={{ textAlign: "center", py: 6 }}>
+          <CloudUpload sx={{ fontSize: 64, color: "primary.main", mb: 2 }} />
           <Typography variant="h6" mb={1}>
             Drag & drop files here, or click to select
           </Typography>
@@ -77,7 +88,7 @@ const FileUpload: React.FC = () => {
             ref={fileInputRef}
             type="file"
             multiple
-            style={{ display: 'none' }}
+            style={{ display: "none" }}
             onChange={(e) => handleFileUpload(e.target.files)}
           />
         </CardContent>
@@ -85,7 +96,9 @@ const FileUpload: React.FC = () => {
 
       {isLoading && (
         <Box mb={2}>
-          <Typography variant="body2" mb={1}>Uploading...</Typography>
+          <Typography variant="body2" mb={1}>
+            Uploading...
+          </Typography>
           <LinearProgress />
         </Box>
       )}
@@ -93,7 +106,9 @@ const FileUpload: React.FC = () => {
       {uploadedFiles.length > 0 && (
         <Card>
           <CardContent>
-            <Typography variant="h6" fontWeight="bold" mb={2}>Uploaded Files</Typography>
+            <Typography variant="h6" fontWeight="bold" mb={2}>
+              Uploaded Files
+            </Typography>
             <List dense>
               {uploadedFiles.map((file, idx) => (
                 <ListItem key={idx}>

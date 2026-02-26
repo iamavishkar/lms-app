@@ -13,7 +13,11 @@ import { getErrorMessage, calculateGrade } from "../../utils/helpers";
 const ResultList: React.FC = () => {
   const navigate = useNavigate();
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" as "success" | "error" });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
 
   const { data: results = [], isLoading, error } = useGetResultsQuery();
   const [deleteResult] = useDeleteResultMutation();
@@ -32,27 +36,70 @@ const ResultList: React.FC = () => {
   if (error) return <ErrorAlert message="Failed to load results" />;
 
   const columns: GridColDef[] = [
-    { field: "student", headerName: "Student", flex: 1, valueGetter: (_, row) => row.student?.user?.name },
-    { field: "exam", headerName: "Exam", flex: 1, valueGetter: (_, row) => row.exam?.name },
+    {
+      field: "student",
+      headerName: "Student",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: ({ row }) => <>{row.student?.user?.name}</>,
+    },
+    {
+      field: "exam",
+      headerName: "Exam",
+      flex: 1,
+      sortable: false,
+      filterable: false,
+      renderCell: ({ row }) => <>{row.exam?.name}</>,
+    },
     { field: "marksObtained", headerName: "Marks Obtained", width: 130 },
-    { field: "totalMarks", headerName: "Total Marks", width: 110, valueGetter: (_, row) => row.exam?.totalMarks },
+    {
+      field: "totalMarks",
+      headerName: "Total Marks",
+      width: 110,
+      sortable: false,
+      filterable: false,
+      renderCell: ({ row }) => <>{row.exam?.totalMarks}</>,
+    },
     {
       field: "grade",
       headerName: "Grade",
       width: 90,
       renderCell: ({ row }) => {
         const grade = row.grade || calculateGrade(row.marksObtained, row.exam?.totalMarks ?? 100);
-        return <Chip label={grade} size="small" color={grade === "F" ? "error" : grade.startsWith("A") ? "success" : "primary"} />;
+        return (
+          <Chip
+            label={grade}
+            size="small"
+            color={grade === "F" ? "error" : grade.startsWith("A") ? "success" : "primary"}
+          />
+        );
       },
     },
-    { field: "remarks", headerName: "Remarks", flex: 1, valueGetter: (value) => value || "-" },
+    {
+      field: "remarks",
+      headerName: "Remarks",
+      flex: 1,
+      renderCell: ({ value }) => <>{value || "-"}</>,
+    },
     {
       field: "actions",
       type: "actions",
       headerName: "Actions",
       getActions: ({ id }) => [
-        <GridActionsCellItem key="edit" icon={<Edit />} label="Edit" onClick={() => navigate(`/results/${id}/edit`)} />,
-        <GridActionsCellItem key="delete" icon={<Delete />} label="Delete" onClick={() => setDeleteId(id as number)} color="error" />,
+        <GridActionsCellItem
+          key="edit"
+          icon={<Edit />}
+          label="Edit"
+          onClick={() => navigate(`/results/${id}/edit`)}
+        />,
+        <GridActionsCellItem
+          key="delete"
+          icon={<Delete />}
+          label="Delete"
+          onClick={() => setDeleteId(id as number)}
+          color="error"
+        />,
       ],
     },
   ];

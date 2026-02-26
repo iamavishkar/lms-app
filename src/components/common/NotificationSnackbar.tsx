@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Snackbar, Alert } from '@mui/material';
+import React, { useState, useEffect } from "react";
+import { Snackbar, Alert } from "@mui/material";
 
 interface NotificationSnackbarProps {
   open: boolean;
   message: string;
-  severity?: 'success' | 'error' | 'warning' | 'info';
+  severity?: "success" | "error" | "warning" | "info";
   onClose: () => void;
   autoHideDuration?: number;
 }
@@ -12,7 +12,7 @@ interface NotificationSnackbarProps {
 const NotificationSnackbar: React.FC<NotificationSnackbarProps> = ({
   open,
   message,
-  severity = 'success',
+  severity = "success",
   onClose,
   autoHideDuration = 4000,
 }) => {
@@ -23,7 +23,7 @@ const NotificationSnackbar: React.FC<NotificationSnackbarProps> = ({
   }, [open]);
 
   const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') return;
+    if (reason === "clickaway") return;
     setInternalOpen(false);
     onClose();
   };
@@ -33,7 +33,7 @@ const NotificationSnackbar: React.FC<NotificationSnackbarProps> = ({
       open={internalOpen}
       autoHideDuration={autoHideDuration}
       onClose={handleClose}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
     >
       <Alert onClose={handleClose} severity={severity} variant="filled">
         {message}

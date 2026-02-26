@@ -19,9 +19,7 @@ export const teachersApi = apiSlice.injectEndpoints({
       { id?: number; data: CreateTeacherDto | Partial<CreateTeacherDto> }
     >({
       query: ({ id, data }) => ({
-        url: id
-          ? API_ENDPOINTS.TEACHERS.BY_ID(id)
-          : API_ENDPOINTS.TEACHERS.BASE,
+        url: id ? API_ENDPOINTS.TEACHERS.BY_ID(id) : API_ENDPOINTS.TEACHERS.BASE,
         method: id ? "PUT" : "POST",
         body: data,
       }),

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Card,
@@ -15,40 +15,41 @@ import {
   TableCell,
   TableContainer,
   Paper,
-} from '@mui/material';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetAttendanceQuery } from '../../app/api/attendanceApi';
-import { useGetStudentsQuery } from '../../app/api/studentsApi';
-import { useGetClassesQuery } from '../../app/api/classesApi';
-import { formatDate } from '../../utils/helpers';
-import { AttendanceStatus } from '../../interfaces';
+} from "@mui/material";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+import ErrorAlert from "../../components/common/ErrorAlert";
+import { useGetAttendanceQuery } from "../../app/api/attendanceApi";
+import { useGetStudentsQuery } from "../../app/api/studentsApi";
+import { useGetClassesQuery } from "../../app/api/classesApi";
+import { formatDate } from "../../utils/helpers";
+import { AttendanceStatus } from "../../interfaces";
 
-const statusColor: Record<AttendanceStatus, 'success' | 'error' | 'warning'> = {
-  present: 'success',
-  absent: 'error',
-  late: 'warning',
+const statusColor: Record<AttendanceStatus, "success" | "error" | "warning"> = {
+  present: "success",
+  absent: "error",
+  late: "warning",
 };
 
 const AttendanceReport: React.FC = () => {
-  const [filterClass, setFilterClass] = useState('');
-  const [filterStudent, setFilterStudent] = useState('');
+  const [filterClass, setFilterClass] = useState("");
+  const [filterStudent, setFilterStudent] = useState("");
 
   const { data: attendance, isLoading, error } = useGetAttendanceQuery();
   const { data: students } = useGetStudentsQuery();
   const { data: classes } = useGetClassesQuery();
 
-  const filtered = attendance?.filter((a) => {
-    if (filterClass && a.class?.id !== Number(filterClass)) return false;
-    if (filterStudent && a.student?.id !== Number(filterStudent)) return false;
-    return true;
-  }) ?? [];
+  const filtered =
+    attendance?.filter((a) => {
+      if (filterClass && a.class?.id !== Number(filterClass)) return false;
+      if (filterStudent && a.student?.id !== Number(filterStudent)) return false;
+      return true;
+    }) ?? [];
 
   const summary = {
     total: filtered.length,
-    present: filtered.filter((a) => a.status === 'present').length,
-    absent: filtered.filter((a) => a.status === 'absent').length,
-    late: filtered.filter((a) => a.status === 'late').length,
+    present: filtered.filter((a) => a.status === "present").length,
+    absent: filtered.filter((a) => a.status === "absent").length,
+    late: filtered.filter((a) => a.status === "late").length,
   };
 
   if (isLoading) return <LoadingSpinner />;
@@ -74,7 +75,9 @@ const AttendanceReport: React.FC = () => {
               >
                 <MenuItem value="">All Classes</MenuItem>
                 {classes?.map((c) => (
-                  <MenuItem key={c.id} value={c.id}>{c.name} {c.section}</MenuItem>
+                  <MenuItem key={c.id} value={c.id}>
+                    {c.name} {c.section}
+                  </MenuItem>
                 ))}
               </TextField>
             </Grid>
@@ -89,7 +92,9 @@ const AttendanceReport: React.FC = () => {
               >
                 <MenuItem value="">All Students</MenuItem>
                 {students?.map((s) => (
-                  <MenuItem key={s.id} value={s.id}>{s.user?.name}</MenuItem>
+                  <MenuItem key={s.id} value={s.id}>
+                    {s.user?.name}
+                  </MenuItem>
                 ))}
               </TextField>
             </Grid>
@@ -100,32 +105,40 @@ const AttendanceReport: React.FC = () => {
       <Grid container spacing={2} mb={3}>
         <Grid item xs={6} md={3}>
           <Card>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" fontWeight="bold">{summary.total}</Typography>
+            <CardContent sx={{ textAlign: "center" }}>
+              <Typography variant="h4" fontWeight="bold">
+                {summary.total}
+              </Typography>
               <Typography color="text.secondary">Total</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={6} md={3}>
           <Card>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" fontWeight="bold" color="success.main">{summary.present}</Typography>
+            <CardContent sx={{ textAlign: "center" }}>
+              <Typography variant="h4" fontWeight="bold" color="success.main">
+                {summary.present}
+              </Typography>
               <Typography color="text.secondary">Present</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={6} md={3}>
           <Card>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" fontWeight="bold" color="error.main">{summary.absent}</Typography>
+            <CardContent sx={{ textAlign: "center" }}>
+              <Typography variant="h4" fontWeight="bold" color="error.main">
+                {summary.absent}
+              </Typography>
               <Typography color="text.secondary">Absent</Typography>
             </CardContent>
           </Card>
         </Grid>
         <Grid item xs={6} md={3}>
           <Card>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" fontWeight="bold" color="warning.main">{summary.late}</Typography>
+            <CardContent sx={{ textAlign: "center" }}>
+              <Typography variant="h4" fontWeight="bold" color="warning.main">
+                {summary.late}
+              </Typography>
               <Typography color="text.secondary">Late</Typography>
             </CardContent>
           </Card>
@@ -149,12 +162,20 @@ const AttendanceReport: React.FC = () => {
                 <TableCell>{a.student?.user?.name}</TableCell>
                 <TableCell>{a.class?.name}</TableCell>
                 <TableCell>
-                  <Chip label={a.status} size="small" color={statusColor[a.status as AttendanceStatus] ?? 'default'} />
+                  <Chip
+                    label={a.status}
+                    size="small"
+                    color={statusColor[a.status as AttendanceStatus] ?? "default"}
+                  />
                 </TableCell>
               </TableRow>
             ))}
             {filtered.length === 0 && (
-              <TableRow><TableCell colSpan={4} align="center">No records found</TableCell></TableRow>
+              <TableRow>
+                <TableCell colSpan={4} align="center">
+                  No records found
+                </TableCell>
+              </TableRow>
             )}
           </TableBody>
         </Table>

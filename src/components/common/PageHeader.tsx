@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography, Button, Divider } from '@mui/material';
+import React from "react";
+import { Box, Typography, Button, Divider } from "@mui/material";
 
 interface PageHeaderProps {
   title: string;
@@ -25,11 +25,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ title, subtitle, action }) => (
         )}
       </Box>
       {action && (
-        <Button
-          variant="contained"
-          startIcon={action.icon}
-          onClick={action.onClick}
-        >
+        <Button variant="contained" startIcon={action.icon} onClick={action.onClick}>
           {action.label}
         </Button>
       )}

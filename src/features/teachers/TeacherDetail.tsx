@@ -25,14 +25,22 @@ const TeacherDetail: React.FC = () => {
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Box display="flex" alignItems="center" gap={1}>
-          <Button startIcon={<ArrowBack />} onClick={() => navigate("/teachers")} variant="outlined">
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={() => navigate("/teachers")}
+            variant="outlined"
+          >
             Back
           </Button>
           <Typography variant="h5" fontWeight="bold">
             Teacher Profile
           </Typography>
         </Box>
-        <Button startIcon={<Edit />} variant="contained" onClick={() => navigate(`/teachers/${id}/edit`)}>
+        <Button
+          startIcon={<Edit />}
+          variant="contained"
+          onClick={() => navigate(`/teachers/${id}/edit`)}
+        >
           Edit
         </Button>
       </Box>

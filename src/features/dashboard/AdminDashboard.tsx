@@ -1,11 +1,30 @@
-import React from 'react';
-import { Grid, Typography, Box, Card, CardContent, Table, TableBody, TableCell, TableHead, TableRow, Chip } from '@mui/material';
-import { People, School, SupervisorAccount, FamilyRestroom, Class, Subject } from '@mui/icons-material';
-import StatsCard from '../../components/common/StatsCard';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetDashboardStatsQuery } from '../../app/api/dashboardApi';
-import { formatDate } from '../../utils/helpers';
+import React from "react";
+import {
+  Grid,
+  Typography,
+  Box,
+  Card,
+  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Chip,
+} from "@mui/material";
+import {
+  People,
+  School,
+  SupervisorAccount,
+  FamilyRestroom,
+  Class,
+  Subject,
+} from "@mui/icons-material";
+import StatsCard from "../../components/common/StatsCard";
+import LoadingSpinner from "../../components/common/LoadingSpinner";
+import ErrorAlert from "../../components/common/ErrorAlert";
+import { useGetDashboardStatsQuery } from "../../app/api/dashboardApi";
+import { formatDate } from "../../utils/helpers";
 
 const AdminDashboard: React.FC = () => {
   const { data: stats, isLoading, error } = useGetDashboardStatsQuery();

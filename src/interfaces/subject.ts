@@ -17,4 +17,3 @@ export interface CreateSubjectDto {
   code: string;
   description?: string;
 }
-

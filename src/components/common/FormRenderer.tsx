@@ -84,24 +84,13 @@ function FormRenderer<T extends Record<string, unknown>>({
             {fields
               .filter((f) => !f.hidden)
               .map((fieldDef) => (
-                <Grid
-                  item
-                  xs={12}
-                  md={fieldDef.gridMd ?? 6}
-                  key={fieldDef.name}
-                >
+                <Grid item xs={12} md={fieldDef.gridMd ?? 6} key={fieldDef.name}>
                   <Field name={fieldDef.name}>
                     {({ field }: FieldProps) => {
-                      const hasError =
-                        !!(errors[fieldDef.name] && touched[fieldDef.name]);
-                      const helperText = hasError
-                        ? String(errors[fieldDef.name])
-                        : undefined;
+                      const hasError = !!(errors[fieldDef.name] && touched[fieldDef.name]);
+                      const helperText = hasError ? String(errors[fieldDef.name]) : undefined;
 
-                      if (
-                        fieldDef.type === "select" &&
-                        fieldDef.options?.length
-                      ) {
+                      if (fieldDef.type === "select" && fieldDef.options?.length) {
                         return (
                           <TextField
                             {...field}
@@ -121,10 +110,7 @@ function FormRenderer<T extends Record<string, unknown>>({
                         );
                       }
 
-                      if (
-                        fieldDef.type === "radio" &&
-                        fieldDef.options?.length
-                      ) {
+                      if (fieldDef.type === "radio" && fieldDef.options?.length) {
                         return (
                           <FormControl error={hasError}>
                             <FormLabel>{fieldDef.label}</FormLabel>
@@ -167,9 +153,7 @@ function FormRenderer<T extends Record<string, unknown>>({
                           error={hasError}
                           helperText={helperText}
                           value={field.value ?? ""}
-                          InputLabelProps={
-                            fieldDef.type === "date" ? { shrink: true } : undefined
-                          }
+                          InputLabelProps={fieldDef.type === "date" ? { shrink: true } : undefined}
                         />
                       );
                     }}
@@ -179,11 +163,7 @@ function FormRenderer<T extends Record<string, unknown>>({
           </Grid>
 
           <Box mt={3} display="flex" gap={2}>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={isSubmitting || isLoading}
-            >
+            <Button type="submit" variant="contained" disabled={isSubmitting || isLoading}>
               {isSubmitting || isLoading ? (
                 <CircularProgress size={20} color="inherit" />
               ) : (

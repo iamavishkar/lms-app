@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import {
   Box,
   Card,
@@ -12,19 +12,22 @@ import {
   InputAdornment,
   IconButton,
   CircularProgress,
-} from '@mui/material';
-import { Visibility, VisibilityOff, School } from '@mui/icons-material';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { useRegisterMutation } from '../../app/api/authApi';
-import { setCredentials } from './authSlice';
-import { RegisterData } from '../../interfaces';
+} from "@mui/material";
+import { Visibility, VisibilityOff, School } from "@mui/icons-material";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useRegisterMutation } from "../../app/api/authApi";
+import { setCredentials } from "./authSlice";
+import { RegisterData } from "../../interfaces";
 
 const schema = yup.object({
-  name: yup.string().min(2, 'Name must be at least 2 characters').required('Name is required'),
-  email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+  name: yup.string().min(2, "Name must be at least 2 characters").required("Name is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
 });
 
 const Register: React.FC = () => {
@@ -33,7 +36,11 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
   const [register_, { isLoading, error }] = useRegisterMutation();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<RegisterData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterData>({
     resolver: yupResolver(schema),
   });
 
@@ -41,30 +48,33 @@ const Register: React.FC = () => {
     try {
       const result = await register_(data).unwrap();
       dispatch(setCredentials({ user: result.user, token: result.access_token }));
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch {
       // error handled by RTK Query
     }
   };
 
-  const errorMessage = error && 'data' in error
-    ? (error.data as { message?: string })?.message || 'Registration failed'
-    : error ? 'Registration failed' : null;
+  const errorMessage =
+    error && "data" in error
+      ? (error.data as { message?: string })?.message || "Registration failed"
+      : error
+        ? "Registration failed"
+        : null;
 
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(135deg, #1976d2 0%, #9c27b0 100%)',
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #1976d2 0%, #9c27b0 100%)",
       }}
     >
-      <Card sx={{ width: '100%', maxWidth: 420, mx: 2 }}>
+      <Card sx={{ width: "100%", maxWidth: 420, mx: 2 }}>
         <CardContent sx={{ p: 4 }}>
-          <Box sx={{ textAlign: 'center', mb: 3 }}>
-            <School sx={{ fontSize: 48, color: 'primary.main' }} />
+          <Box sx={{ textAlign: "center", mb: 3 }}>
+            <School sx={{ fontSize: 48, color: "primary.main" }} />
             <Typography variant="h5" fontWeight="bold" mt={1}>
               Create Account
             </Typography>
@@ -81,7 +91,7 @@ const Register: React.FC = () => {
 
           <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
             <TextField
-              {...register('name')}
+              {...register("name")}
               label="Full Name"
               fullWidth
               margin="normal"
@@ -90,7 +100,7 @@ const Register: React.FC = () => {
               autoFocus
             />
             <TextField
-              {...register('email')}
+              {...register("email")}
               label="Email Address"
               type="email"
               fullWidth
@@ -99,9 +109,9 @@ const Register: React.FC = () => {
               helperText={errors.email?.message}
             />
             <TextField
-              {...register('password')}
+              {...register("password")}
               label="Password"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               fullWidth
               margin="normal"
               error={!!errors.password}
@@ -124,12 +134,12 @@ const Register: React.FC = () => {
               disabled={isLoading}
               sx={{ mt: 3, mb: 2 }}
             >
-              {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Register'}
+              {isLoading ? <CircularProgress size={24} color="inherit" /> : "Register"}
             </Button>
-            <Box sx={{ textAlign: 'center' }}>
+            <Box sx={{ textAlign: "center" }}>
               <Typography variant="body2">
-                Already have an account?{' '}
-                <RouterLink to="/login" style={{ color: '#1976d2' }}>
+                Already have an account?{" "}
+                <RouterLink to="/login" style={{ color: "#1976d2" }}>
                   Sign In
                 </RouterLink>
               </Typography>

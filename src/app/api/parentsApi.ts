@@ -19,14 +19,11 @@ export const parentsApi = apiSlice.injectEndpoints({
       { id?: number; data: CreateParentDto | Partial<CreateParentDto> }
     >({
       query: ({ id, data }) => ({
-        url: id
-          ? API_ENDPOINTS.PARENTS.BY_ID(id)
-          : API_ENDPOINTS.PARENTS.BASE,
+        url: id ? API_ENDPOINTS.PARENTS.BY_ID(id) : API_ENDPOINTS.PARENTS.BASE,
         method: id ? "PUT" : "POST",
         body: data,
       }),
-      invalidatesTags: (_r, _e, { id }) =>
-        id ? [{ type: "Parent", id }, "Parent"] : ["Parent"],
+      invalidatesTags: (_r, _e, { id }) => (id ? [{ type: "Parent", id }, "Parent"] : ["Parent"]),
     }),
 
     deleteParent: builder.mutation<void, number>({

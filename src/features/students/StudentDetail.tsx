@@ -1,6 +1,16 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Card, CardContent, Typography, Grid, Chip, Button, Divider, Avatar } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Chip,
+  Button,
+  Divider,
+  Avatar,
+} from "@mui/material";
 import { Edit, ArrowBack } from "@mui/icons-material";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import ErrorAlert from "../../components/common/ErrorAlert";
@@ -31,14 +41,22 @@ const StudentDetail: React.FC = () => {
     <Box>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Box display="flex" alignItems="center" gap={1}>
-          <Button startIcon={<ArrowBack />} onClick={() => navigate("/students")} variant="outlined">
+          <Button
+            startIcon={<ArrowBack />}
+            onClick={() => navigate("/students")}
+            variant="outlined"
+          >
             Back
           </Button>
           <Typography variant="h5" fontWeight="bold">
             Student Profile
           </Typography>
         </Box>
-        <Button startIcon={<Edit />} variant="contained" onClick={() => navigate(`/students/${id}/edit`)}>
+        <Button
+          startIcon={<Edit />}
+          variant="contained"
+          onClick={() => navigate(`/students/${id}/edit`)}
+        >
           Edit
         </Button>
       </Box>
@@ -69,10 +87,18 @@ const StudentDetail: React.FC = () => {
           </Grid>
           <Divider sx={{ my: 2 }} />
           <Box display="flex" gap={2}>
-            <Button variant="outlined" size="small" onClick={() => navigate(`/students/${id}/attendance`)}>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => navigate(`/students/${id}/attendance`)}
+            >
               View Attendance
             </Button>
-            <Button variant="outlined" size="small" onClick={() => navigate(`/students/${id}/results`)}>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => navigate(`/students/${id}/results`)}
+            >
               View Results
             </Button>
           </Box>

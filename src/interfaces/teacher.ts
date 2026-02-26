@@ -22,4 +22,3 @@ export interface CreateTeacherDto {
   address?: string;
   userId: number;
 }
-

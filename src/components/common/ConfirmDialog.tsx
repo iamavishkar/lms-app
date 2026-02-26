@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Dialog,
   DialogTitle,
@@ -6,7 +6,7 @@ import {
   DialogActions,
   Button,
   Typography,
-} from '@mui/material';
+} from "@mui/material";
 
 interface ConfirmDialogProps {
   open: boolean;
@@ -16,18 +16,18 @@ interface ConfirmDialogProps {
   onCancel: () => void;
   confirmLabel?: string;
   cancelLabel?: string;
-  severity?: 'error' | 'warning' | 'info';
+  severity?: "error" | "warning" | "info";
 }
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   open,
-  title = 'Confirm Action',
+  title = "Confirm Action",
   message,
   onConfirm,
   onCancel,
-  confirmLabel = 'Confirm',
-  cancelLabel = 'Cancel',
-  severity = 'warning',
+  confirmLabel = "Confirm",
+  cancelLabel = "Cancel",
+  severity = "warning",
 }) => (
   <Dialog open={open} onClose={onCancel} maxWidth="xs" fullWidth>
     <DialogTitle>{title}</DialogTitle>
@@ -41,7 +41,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       <Button
         onClick={onConfirm}
         variant="contained"
-        color={severity === 'error' ? 'error' : 'primary'}
+        color={severity === "error" ? "error" : "primary"}
       >
         {confirmLabel}
       </Button>

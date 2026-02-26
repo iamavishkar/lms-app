@@ -21,12 +21,19 @@ const TeacherForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: teacher, isLoading: loadingTeacher } = useGetTeacherByIdQuery(Number(id), { skip: !isEdit });
+  const { data: teacher, isLoading: loadingTeacher } = useGetTeacherByIdQuery(Number(id), {
+    skip: !isEdit,
+  });
   const { data: users = [] } = useGetUsersQuery();
   const [saveTeacher, { isLoading }] = useSaveTeacherMutation();
 
   const fields = useMemo(
-    () => teacherFormFields.map((f) => (f.name === "userId" ? { ...f, options: users.map((u) => ({ label: u.name, value: u.id })) } : f)),
+    () =>
+      teacherFormFields.map((f) =>
+        f.name === "userId"
+          ? { ...f, options: users.map((u) => ({ label: u.name, value: u.id })) }
+          : f
+      ),
     [users]
   );
 
@@ -43,8 +50,16 @@ const TeacherForm: React.FC = () => {
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveTeacher({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateTeacherDto }).unwrap();
-      dispatch(showSnackbar({ message: isEdit ? "Teacher updated successfully" : "Teacher created successfully", severity: "success" }));
+      await saveTeacher({
+        id: isEdit ? Number(id) : undefined,
+        data: values as unknown as CreateTeacherDto,
+      }).unwrap();
+      dispatch(
+        showSnackbar({
+          message: isEdit ? "Teacher updated successfully" : "Teacher created successfully",
+          severity: "success",
+        })
+      );
       navigate(ROUTES.TEACHERS.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));
@@ -60,7 +75,9 @@ const TeacherForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={fields}
-            initialValues={(editValues || teacherInitialValues) as unknown as Record<string, unknown>}
+            initialValues={
+              (editValues || teacherInitialValues) as unknown as Record<string, unknown>
+            }
             validationSchema={teacherFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.TEACHERS.LIST)}

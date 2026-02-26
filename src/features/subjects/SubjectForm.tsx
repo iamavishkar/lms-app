@@ -20,7 +20,9 @@ const SubjectForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: subject, isLoading: loadingSubject } = useGetSubjectByIdQuery(Number(id), { skip: !isEdit });
+  const { data: subject, isLoading: loadingSubject } = useGetSubjectByIdQuery(Number(id), {
+    skip: !isEdit,
+  });
   const [saveSubject, { isLoading }] = useSaveSubjectMutation();
 
   const editValues = subject
@@ -29,8 +31,16 @@ const SubjectForm: React.FC = () => {
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveSubject({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateSubjectDto }).unwrap();
-      dispatch(showSnackbar({ message: isEdit ? "Subject updated successfully" : "Subject created successfully", severity: "success" }));
+      await saveSubject({
+        id: isEdit ? Number(id) : undefined,
+        data: values as unknown as CreateSubjectDto,
+      }).unwrap();
+      dispatch(
+        showSnackbar({
+          message: isEdit ? "Subject updated successfully" : "Subject created successfully",
+          severity: "success",
+        })
+      );
       navigate(ROUTES.SUBJECTS.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));
@@ -46,7 +56,9 @@ const SubjectForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={subjectFormFields}
-            initialValues={(editValues || subjectInitialValues) as unknown as Record<string, unknown>}
+            initialValues={
+              (editValues || subjectInitialValues) as unknown as Record<string, unknown>
+            }
             validationSchema={subjectFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.SUBJECTS.LIST)}
