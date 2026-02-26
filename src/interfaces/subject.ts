@@ -1,4 +1,3 @@
-import type { User } from "./user";
 import type { Class } from "./class";
 import type { Teacher } from "./teacher";
 

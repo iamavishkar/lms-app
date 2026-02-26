@@ -11,8 +11,7 @@ import { showSnackbar } from "../../app/store/uiSlice";
 import { getErrorMessage } from "../../utils/helpers";
 import { ROUTES } from "../../routes/routes";
 import { classFormFields } from "../../forms/form-fields";
-import { classInitialValues, getClassFormValues } from "../../forms/form-values";
-import { classFormSchema } from "../../forms/form-schema";
+import { getClassFormValues } from "../../forms/form-values";import { classFormSchema } from "../../forms/form-schema";
 import type { CreateClassDto } from "../../interfaces";
 
 const ClassForm: React.FC = () => {
