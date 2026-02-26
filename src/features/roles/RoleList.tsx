@@ -9,7 +9,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetRolesQuery, useDeleteRoleMutation } from '../../api/rolesApi';
+import { useGetRolesQuery, useDeleteRoleMutation } from '../../app/api/rolesApi';
 import { getErrorMessage } from '../../utils/helpers';
 
 const RoleList: React.FC = () => {

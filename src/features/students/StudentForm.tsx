@@ -5,17 +5,17 @@ import { useDispatch } from "react-redux";
 import PageHeader from "../../components/common/PageHeader";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import FormRenderer from "../../components/common/FormRenderer";
-import { useGetStudentByIdQuery, useSaveStudentMutation } from "../../api/studentsApi";
-import { useGetUsersQuery } from "../../api/usersApi";
-import { useGetClassesQuery } from "../../api/classesApi";
-import { useGetParentsQuery } from "../../api/parentsApi";
-import { showSnackbar } from "../../store/uiSlice";
+import { useGetStudentByIdQuery, useSaveStudentMutation } from "../../app/api/studentsApi";
+import { useGetUsersQuery } from "../../app/api/usersApi";
+import { useGetClassesQuery } from "../../app/api/classesApi";
+import { useGetParentsQuery } from "../../app/api/parentsApi";
+import { showSnackbar } from "../../app/store/uiSlice";
 import { getErrorMessage } from "../../utils/helpers";
 import { ROUTES } from "../../routes/routes";
-import { getStudentFormFields } from "./forms/form-fields";
-import { studentFormInitialValues } from "./forms/form-values";
-import { studentFormSchema } from "./forms/form-schema";
-import type { CreateStudentDto } from "../../types";
+import { getStudentFormFields } from "../../forms/form-fields";
+import { getStudentFormValues } from "../../forms/form-values";
+import { studentFormSchema } from "../../forms/form-schema";
+import type { CreateStudentDto } from "../../interfaces";
 
 const StudentForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,48 +32,37 @@ const StudentForm: React.FC = () => {
   const { data: parents = [] } = useGetParentsQuery();
   const [saveStudent, { isLoading }] = useSaveStudentMutation();
 
-  const fields = useMemo(() => {
-    return getStudentFormFields().map((f) => {
-      if (f.name === "userId")
-        return {
-          ...f,
-          options: users.map((u) => ({ label: u.name, value: u.id })),
-        };
-      if (f.name === "classId")
-        return {
-          ...f,
-          options: [
-            { label: "None", value: "" },
-            ...classes.map((c) => ({ label: c.name, value: c.id })),
-          ],
-        };
-      if (f.name === "parentId")
-        return {
-          ...f,
-          options: [
-            { label: "None", value: "" },
-            ...parents.map((p) => ({
-              label: p.user?.name ?? `Parent #${p.id}`,
-              value: p.id,
-            })),
-          ],
-        };
-      return f;
-    });
-  }, [users, classes, parents]);
-
-  const initialValues = student
-    ? {
-        enrollmentNumber: student.enrollmentNumber,
-        dateOfBirth: student.dateOfBirth?.split("T")[0] ?? "",
-        gender: student.gender,
-        address: student.address ?? "",
-        phone: student.phone ?? "",
-        userId: student.user?.id,
-        classId: student.class?.id,
-        parentId: student.parent?.id,
-      }
-    : studentFormInitialValues;
+  const fields = useMemo(
+    () =>
+      getStudentFormFields().map((f) => {
+        if (f.name === "userId")
+          return {
+            ...f,
+            options: users.map((u) => ({ label: u.name, value: u.id })),
+          };
+        if (f.name === "classId")
+          return {
+            ...f,
+            options: [
+              { label: "None", value: "" },
+              ...classes.map((c) => ({ label: c.name, value: c.id })),
+            ],
+          };
+        if (f.name === "parentId")
+          return {
+            ...f,
+            options: [
+              { label: "None", value: "" },
+              ...parents.map((p) => ({
+                label: p.user?.name ?? `Parent #${p.id}`,
+                value: p.id,
+              })),
+            ],
+          };
+        return f;
+      }),
+    [users, classes, parents]
+  );
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
@@ -104,7 +93,9 @@ const StudentForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={fields}
-            initialValues={initialValues as unknown as Record<string, unknown>}
+            initialValues={
+              getStudentFormValues(student) as unknown as Record<string, unknown>
+            }
             validationSchema={studentFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.STUDENTS.LIST)}

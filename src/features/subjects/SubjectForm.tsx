@@ -4,14 +4,14 @@ import { useDispatch } from "react-redux";
 import PageHeader from "../../components/common/PageHeader";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import FormRenderer from "../../components/common/FormRenderer";
-import { useGetSubjectByIdQuery, useSaveSubjectMutation } from "../../api/subjectsApi";
-import { showSnackbar } from "../../store/uiSlice";
+import { useGetSubjectByIdQuery, useSaveSubjectMutation } from "../../app/api/subjectsApi";
+import { showSnackbar } from "../../app/store/uiSlice";
 import { getErrorMessage } from "../../utils/helpers";
 import { ROUTES } from "../../routes/routes";
-import { subjectFormFields } from "./forms/form-fields";
-import { subjectFormInitialValues } from "./forms/form-values";
-import { subjectFormSchema } from "./forms/form-schema";
-import type { CreateSubjectDto } from "../../types";
+import { subjectFormFields } from "../../forms/form-fields";
+import { getSubjectFormValues } from "../../forms/form-values";
+import { subjectFormSchema } from "../../forms/form-schema";
+import type { CreateSubjectDto } from "../../interfaces";
 
 const SubjectForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,14 +24,6 @@ const SubjectForm: React.FC = () => {
     { skip: !isEdit }
   );
   const [saveSubject, { isLoading }] = useSaveSubjectMutation();
-
-  const initialValues = subject
-    ? {
-        name: subject.name,
-        code: subject.code,
-        description: subject.description ?? "",
-      }
-    : subjectFormInitialValues;
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
@@ -62,7 +54,9 @@ const SubjectForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={subjectFormFields}
-            initialValues={initialValues as unknown as Record<string, unknown>}
+            initialValues={
+              getSubjectFormValues(subject) as unknown as Record<string, unknown>
+            }
             validationSchema={subjectFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.SUBJECTS.LIST)}

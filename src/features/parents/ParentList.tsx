@@ -9,7 +9,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetParentsQuery, useDeleteParentMutation } from '../../api/parentsApi';
+import { useGetParentsQuery, useDeleteParentMutation } from '../../app/api/parentsApi';
 import { getErrorMessage } from '../../utils/helpers';
 
 const ParentList: React.FC = () => {

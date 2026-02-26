@@ -5,15 +5,15 @@ import { useDispatch } from "react-redux";
 import PageHeader from "../../components/common/PageHeader";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import FormRenderer from "../../components/common/FormRenderer";
-import { useGetUserByIdQuery, useSaveUserMutation } from "../../api/usersApi";
-import { useGetRolesQuery } from "../../api/rolesApi";
-import { showSnackbar } from "../../store/uiSlice";
+import { useGetUserByIdQuery, useSaveUserMutation } from "../../app/api/usersApi";
+import { useGetRolesQuery } from "../../app/api/rolesApi";
+import { showSnackbar } from "../../app/store/uiSlice";
 import { getErrorMessage } from "../../utils/helpers";
 import { ROUTES } from "../../routes/routes";
-import { getUserFormFields } from "./forms/form-fields";
-import { userFormInitialValues } from "./forms/form-values";
-import { userFormSchema } from "./forms/form-schema";
-import type { CreateUserDto } from "../../types";
+import { getUserFormFields } from "../../forms/form-fields";
+import { getUserFormValues } from "../../forms/form-values";
+import { userFormSchema } from "../../forms/form-schema";
+import type { CreateUserDto } from "../../interfaces";
 
 const UserForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,27 +28,15 @@ const UserForm: React.FC = () => {
   const { data: roles = [] } = useGetRolesQuery();
   const [saveUser, { isLoading }] = useSaveUserMutation();
 
-  const fields = useMemo(() => {
-    const base = getUserFormFields(isEdit);
-    return base.map((f) =>
-      f.name === "roleId"
-        ? {
-            ...f,
-            options: roles.map((r) => ({ label: r.name, value: r.id })),
-          }
-        : f
-    );
-  }, [isEdit, roles]);
-
-  const initialValues = user
-    ? {
-        name: user.name,
-        email: user.email,
-        password: "",
-        roleId: user.role?.id,
-        isActive: user.isActive,
-      }
-    : userFormInitialValues;
+  const fields = useMemo(
+    () =>
+      getUserFormFields(isEdit).map((f) =>
+        f.name === "roleId"
+          ? { ...f, options: roles.map((r) => ({ label: r.name, value: r.id })) }
+          : f
+      ),
+    [isEdit, roles]
+  );
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
@@ -58,7 +46,9 @@ const UserForm: React.FC = () => {
       }).unwrap();
       dispatch(
         showSnackbar({
-          message: isEdit ? "User updated successfully" : "User created successfully",
+          message: isEdit
+            ? "User updated successfully"
+            : "User created successfully",
           severity: "success",
         })
       );
@@ -77,7 +67,9 @@ const UserForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={fields}
-            initialValues={initialValues as unknown as Record<string, unknown>}
+            initialValues={
+              getUserFormValues(user) as unknown as Record<string, unknown>
+            }
             validationSchema={userFormSchema(isEdit)}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.USERS.LIST)}

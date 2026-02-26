@@ -5,15 +5,15 @@ import { useDispatch } from "react-redux";
 import PageHeader from "../../components/common/PageHeader";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import FormRenderer from "../../components/common/FormRenderer";
-import { useGetTeacherByIdQuery, useSaveTeacherMutation } from "../../api/teachersApi";
-import { useGetUsersQuery } from "../../api/usersApi";
-import { showSnackbar } from "../../store/uiSlice";
+import { useGetTeacherByIdQuery, useSaveTeacherMutation } from "../../app/api/teachersApi";
+import { useGetUsersQuery } from "../../app/api/usersApi";
+import { showSnackbar } from "../../app/store/uiSlice";
 import { getErrorMessage } from "../../utils/helpers";
 import { ROUTES } from "../../routes/routes";
-import { getTeacherFormFields } from "./forms/form-fields";
-import { teacherFormInitialValues } from "./forms/form-values";
-import { teacherFormSchema } from "./forms/form-schema";
-import type { CreateTeacherDto } from "../../types";
+import { getTeacherFormFields } from "../../forms/form-fields";
+import { getTeacherFormValues } from "../../forms/form-values";
+import { teacherFormSchema } from "../../forms/form-schema";
+import type { CreateTeacherDto } from "../../interfaces";
 
 const TeacherForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,24 +28,15 @@ const TeacherForm: React.FC = () => {
   const { data: users = [] } = useGetUsersQuery();
   const [saveTeacher, { isLoading }] = useSaveTeacherMutation();
 
-  const fields = useMemo(() => {
-    return getTeacherFormFields().map((f) =>
-      f.name === "userId"
-        ? { ...f, options: users.map((u) => ({ label: u.name, value: u.id })) }
-        : f
-    );
-  }, [users]);
-
-  const initialValues = teacher
-    ? {
-        employeeId: teacher.employeeId,
-        qualification: teacher.qualification ?? "",
-        specialization: teacher.specialization ?? "",
-        phone: teacher.phone ?? "",
-        address: teacher.address ?? "",
-        userId: teacher.user?.id,
-      }
-    : teacherFormInitialValues;
+  const fields = useMemo(
+    () =>
+      getTeacherFormFields().map((f) =>
+        f.name === "userId"
+          ? { ...f, options: users.map((u) => ({ label: u.name, value: u.id })) }
+          : f
+      ),
+    [users]
+  );
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
@@ -76,7 +67,9 @@ const TeacherForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={fields}
-            initialValues={initialValues as unknown as Record<string, unknown>}
+            initialValues={
+              getTeacherFormValues(teacher) as unknown as Record<string, unknown>
+            }
             validationSchema={teacherFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.TEACHERS.LIST)}

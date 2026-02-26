@@ -21,7 +21,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetUsersQuery, useDeleteUserMutation } from '../../api/usersApi';
+import { useGetUsersQuery, useDeleteUserMutation } from '../../app/api/usersApi';
 import { getErrorMessage } from '../../utils/helpers';
 
 const UserList: React.FC = () => {

@@ -9,7 +9,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetStudentsQuery, useDeleteStudentMutation } from '../../api/studentsApi';
+import { useGetStudentsQuery, useDeleteStudentMutation } from '../../app/api/studentsApi';
 import { getErrorMessage } from '../../utils/helpers';
 
 const StudentList: React.FC = () => {

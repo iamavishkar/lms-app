@@ -15,9 +15,9 @@ import {
 import { CloudUpload, InsertDriveFile, CheckCircle } from '@mui/icons-material';
 import PageHeader from '../../components/common/PageHeader';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useUploadFileMutation } from '../../api/filesApi';
+import { useUploadFileMutation } from '../../app/api/filesApi';
 import { getErrorMessage } from '../../utils/helpers';
-import { FileUploadResponse } from '../../types';
+import { FileUploadResponse } from '../../interfaces';
 
 const FileUpload: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);

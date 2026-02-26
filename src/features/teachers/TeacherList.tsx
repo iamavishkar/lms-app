@@ -9,7 +9,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetTeachersQuery, useDeleteTeacherMutation } from '../../api/teachersApi';
+import { useGetTeachersQuery, useDeleteTeacherMutation } from '../../app/api/teachersApi';
 import { getErrorMessage } from '../../utils/helpers';
 
 const TeacherList: React.FC = () => {

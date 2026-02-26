@@ -4,14 +4,14 @@ import { useDispatch } from "react-redux";
 import PageHeader from "../../components/common/PageHeader";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import FormRenderer from "../../components/common/FormRenderer";
-import { useGetRoleByIdQuery, useSaveRoleMutation } from "../../api/rolesApi";
-import { showSnackbar } from "../../store/uiSlice";
+import { useGetRoleByIdQuery, useSaveRoleMutation } from "../../app/api/rolesApi";
+import { showSnackbar } from "../../app/store/uiSlice";
 import { getErrorMessage } from "../../utils/helpers";
 import { ROUTES } from "../../routes/routes";
-import { roleFormFields } from "./forms/form-fields";
-import { roleFormInitialValues } from "./forms/form-values";
-import { roleFormSchema } from "./forms/form-schema";
-import type { CreateRoleDto } from "../../types";
+import { roleFormFields } from "../../forms/form-fields";
+import { getRoleFormValues } from "../../forms/form-values";
+import { roleFormSchema } from "../../forms/form-schema";
+import type { CreateRoleDto } from "../../interfaces";
 
 const RoleForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,10 +25,6 @@ const RoleForm: React.FC = () => {
   );
   const [saveRole, { isLoading }] = useSaveRoleMutation();
 
-  const initialValues = role
-    ? { name: role.name, description: role.description ?? "" }
-    : roleFormInitialValues;
-
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
       await saveRole({
@@ -37,7 +33,9 @@ const RoleForm: React.FC = () => {
       }).unwrap();
       dispatch(
         showSnackbar({
-          message: isEdit ? "Role updated successfully" : "Role created successfully",
+          message: isEdit
+            ? "Role updated successfully"
+            : "Role created successfully",
           severity: "success",
         })
       );
@@ -56,7 +54,9 @@ const RoleForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={roleFormFields}
-            initialValues={initialValues as unknown as Record<string, unknown>}
+            initialValues={
+              getRoleFormValues(role) as unknown as Record<string, unknown>
+            }
             validationSchema={roleFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.ROLES.LIST)}

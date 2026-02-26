@@ -9,7 +9,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetExamsQuery, useDeleteExamMutation } from '../../api/examsApi';
+import { useGetExamsQuery, useDeleteExamMutation } from '../../app/api/examsApi';
 import { getErrorMessage, formatDate } from '../../utils/helpers';
 
 const ExamList: React.FC = () => {

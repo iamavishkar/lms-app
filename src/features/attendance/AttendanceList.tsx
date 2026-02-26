@@ -9,7 +9,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetAttendanceQuery, useDeleteAttendanceMutation } from '../../api/attendanceApi';
+import { useGetAttendanceQuery, useDeleteAttendanceMutation } from '../../app/api/attendanceApi';
 import { getErrorMessage, formatDate } from '../../utils/helpers';
 
 const statusColor: Record<string, 'success' | 'error' | 'warning'> = {

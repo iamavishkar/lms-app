@@ -4,7 +4,7 @@ import { Box, Card, CardContent, Typography, Grid, Button, Divider, Avatar } fro
 import { Edit, ArrowBack } from '@mui/icons-material';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetTeacherByIdQuery } from '../../api/teachersApi';
+import { useGetTeacherByIdQuery } from '../../app/api/teachersApi';
 
 const TeacherDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

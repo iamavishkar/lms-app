@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Snackbar, Alert } from "@mui/material";
 import type { RootState } from "../../app/store";
-import { hideSnackbar } from "../../store/uiSlice";
+import { hideSnackbar } from "../../app/store/uiSlice";
 
 export default function GlobalSnackbar() {
   const dispatch = useDispatch();

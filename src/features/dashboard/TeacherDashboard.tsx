@@ -4,7 +4,7 @@ import { Class, Subject, EventNote, Assignment } from '@mui/icons-material';
 import StatsCard from '../../components/common/StatsCard';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetDashboardStatsQuery } from '../../api/dashboardApi';
+import { useGetDashboardStatsQuery } from '../../app/api/dashboardApi';
 
 const TeacherDashboard: React.FC = () => {
   const { data: stats, isLoading, error } = useGetDashboardStatsQuery();

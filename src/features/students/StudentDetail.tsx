@@ -4,7 +4,7 @@ import { Box, Card, CardContent, Typography, Grid, Chip, Button, Divider, Avatar
 import { Edit, ArrowBack } from '@mui/icons-material';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetStudentByIdQuery } from '../../api/studentsApi';
+import { useGetStudentByIdQuery } from '../../app/api/studentsApi';
 import { formatDate } from '../../utils/helpers';
 
 const StudentDetail: React.FC = () => {

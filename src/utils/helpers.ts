@@ -1,5 +1,5 @@
 import { TOKEN_KEY, USER_KEY } from './constants';
-import { User } from '../types';
+import { User } from '../interfaces';
 
 export const getToken = (): string | null => localStorage.getItem(TOKEN_KEY);
 export const setToken = (token: string): void => localStorage.setItem(TOKEN_KEY, token);

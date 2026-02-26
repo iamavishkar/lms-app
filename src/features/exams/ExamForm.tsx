@@ -5,16 +5,16 @@ import { useDispatch } from "react-redux";
 import PageHeader from "../../components/common/PageHeader";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import FormRenderer from "../../components/common/FormRenderer";
-import { useGetExamByIdQuery, useSaveExamMutation } from "../../api/examsApi";
-import { useGetClassesQuery } from "../../api/classesApi";
-import { useGetSubjectsQuery } from "../../api/subjectsApi";
-import { showSnackbar } from "../../store/uiSlice";
+import { useGetExamByIdQuery, useSaveExamMutation } from "../../app/api/examsApi";
+import { useGetClassesQuery } from "../../app/api/classesApi";
+import { useGetSubjectsQuery } from "../../app/api/subjectsApi";
+import { showSnackbar } from "../../app/store/uiSlice";
 import { getErrorMessage } from "../../utils/helpers";
 import { ROUTES } from "../../routes/routes";
-import { getExamFormFields } from "./forms/form-fields";
-import { examFormInitialValues } from "./forms/form-values";
-import { examFormSchema } from "./forms/form-schema";
-import type { CreateExamDto } from "../../types";
+import { getExamFormFields } from "../../forms/form-fields";
+import { getExamFormValues } from "../../forms/form-values";
+import { examFormSchema } from "../../forms/form-schema";
+import type { CreateExamDto } from "../../interfaces";
 
 const ExamForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,33 +30,23 @@ const ExamForm: React.FC = () => {
   const { data: subjects = [] } = useGetSubjectsQuery();
   const [saveExam, { isLoading }] = useSaveExamMutation();
 
-  const fields = useMemo(() => {
-    return getExamFormFields().map((f) => {
-      if (f.name === "classId")
-        return {
-          ...f,
-          options: classes.map((c) => ({ label: c.name, value: c.id })),
-        };
-      if (f.name === "subjectId")
-        return {
-          ...f,
-          options: subjects.map((s) => ({ label: s.name, value: s.id })),
-        };
-      return f;
-    });
-  }, [classes, subjects]);
-
-  const initialValues = exam
-    ? {
-        name: exam.name,
-        type: exam.type,
-        date: exam.date?.split("T")[0] ?? "",
-        duration: exam.duration,
-        totalMarks: exam.totalMarks,
-        subjectId: exam.subject?.id,
-        classId: exam.class?.id,
-      }
-    : examFormInitialValues;
+  const fields = useMemo(
+    () =>
+      getExamFormFields().map((f) => {
+        if (f.name === "classId")
+          return {
+            ...f,
+            options: classes.map((c) => ({ label: c.name, value: c.id })),
+          };
+        if (f.name === "subjectId")
+          return {
+            ...f,
+            options: subjects.map((s) => ({ label: s.name, value: s.id })),
+          };
+        return f;
+      }),
+    [classes, subjects]
+  );
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
@@ -85,7 +75,9 @@ const ExamForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={fields}
-            initialValues={initialValues as unknown as Record<string, unknown>}
+            initialValues={
+              getExamFormValues(exam) as unknown as Record<string, unknown>
+            }
             validationSchema={examFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.EXAMS.LIST)}

@@ -5,16 +5,16 @@ import { useDispatch } from "react-redux";
 import PageHeader from "../../components/common/PageHeader";
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import FormRenderer from "../../components/common/FormRenderer";
-import { useGetResultByIdQuery, useSaveResultMutation } from "../../api/resultsApi";
-import { useGetStudentsQuery } from "../../api/studentsApi";
-import { useGetExamsQuery } from "../../api/examsApi";
-import { showSnackbar } from "../../store/uiSlice";
+import { useGetResultByIdQuery, useSaveResultMutation } from "../../app/api/resultsApi";
+import { useGetStudentsQuery } from "../../app/api/studentsApi";
+import { useGetExamsQuery } from "../../app/api/examsApi";
+import { showSnackbar } from "../../app/store/uiSlice";
 import { getErrorMessage } from "../../utils/helpers";
 import { ROUTES } from "../../routes/routes";
-import { getResultFormFields } from "./forms/form-fields";
-import { resultFormInitialValues } from "./forms/form-values";
-import { resultFormSchema } from "./forms/form-schema";
-import type { CreateResultDto } from "../../types";
+import { getResultFormFields } from "../../forms/form-fields";
+import { getResultFormValues } from "../../forms/form-values";
+import { resultFormSchema } from "../../forms/form-schema";
+import type { CreateResultDto } from "../../interfaces";
 
 const ResultForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,34 +30,26 @@ const ResultForm: React.FC = () => {
   const { data: exams = [] } = useGetExamsQuery();
   const [saveResult, { isLoading }] = useSaveResultMutation();
 
-  const fields = useMemo(() => {
-    return getResultFormFields().map((f) => {
-      if (f.name === "studentId")
-        return {
-          ...f,
-          options: students.map((s) => ({
-            label: s.user?.name ?? s.enrollmentNumber,
-            value: s.id,
-          })),
-        };
-      if (f.name === "examId")
-        return {
-          ...f,
-          options: exams.map((e) => ({ label: e.name, value: e.id })),
-        };
-      return f;
-    });
-  }, [students, exams]);
-
-  const initialValues = result
-    ? {
-        marksObtained: result.marksObtained,
-        grade: result.grade ?? "",
-        remarks: result.remarks ?? "",
-        studentId: result.student?.id,
-        examId: result.exam?.id,
-      }
-    : resultFormInitialValues;
+  const fields = useMemo(
+    () =>
+      getResultFormFields().map((f) => {
+        if (f.name === "studentId")
+          return {
+            ...f,
+            options: students.map((s) => ({
+              label: s.user?.name ?? s.enrollmentNumber,
+              value: s.id,
+            })),
+          };
+        if (f.name === "examId")
+          return {
+            ...f,
+            options: exams.map((e) => ({ label: e.name, value: e.id })),
+          };
+        return f;
+      }),
+    [students, exams]
+  );
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
@@ -88,7 +80,9 @@ const ResultForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={fields}
-            initialValues={initialValues as unknown as Record<string, unknown>}
+            initialValues={
+              getResultFormValues(result) as unknown as Record<string, unknown>
+            }
             validationSchema={resultFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.RESULTS.LIST)}

@@ -9,7 +9,7 @@ import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetSubjectsQuery, useDeleteSubjectMutation } from '../../api/subjectsApi';
+import { useGetSubjectsQuery, useDeleteSubjectMutation } from '../../app/api/subjectsApi';
 import { getErrorMessage } from '../../utils/helpers';
 
 const SubjectList: React.FC = () => {

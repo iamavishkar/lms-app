@@ -18,11 +18,11 @@ import {
 } from '@mui/material';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorAlert from '../../components/common/ErrorAlert';
-import { useGetAttendanceQuery } from '../../api/attendanceApi';
-import { useGetStudentsQuery } from '../../api/studentsApi';
-import { useGetClassesQuery } from '../../api/classesApi';
+import { useGetAttendanceQuery } from '../../app/api/attendanceApi';
+import { useGetStudentsQuery } from '../../app/api/studentsApi';
+import { useGetClassesQuery } from '../../app/api/classesApi';
 import { formatDate } from '../../utils/helpers';
-import { AttendanceStatus } from '../../types';
+import { AttendanceStatus } from '../../interfaces';
 
 const statusColor: Record<AttendanceStatus, 'success' | 'error' | 'warning'> = {
   present: 'success',

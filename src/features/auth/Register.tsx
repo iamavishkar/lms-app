@@ -17,9 +17,9 @@ import { Visibility, VisibilityOff, School } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useRegisterMutation } from '../../api/authApi';
+import { useRegisterMutation } from '../../app/api/authApi';
 import { setCredentials } from './authSlice';
-import { RegisterData } from '../../types';
+import { RegisterData } from '../../interfaces';
 
 const schema = yup.object({
   name: yup.string().min(2, 'Name must be at least 2 characters').required('Name is required'),

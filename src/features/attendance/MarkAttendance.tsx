@@ -23,10 +23,10 @@ import {
 import PageHeader from '../../components/common/PageHeader';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetClassesQuery } from '../../api/classesApi';
-import { useGetStudentsQuery } from '../../api/studentsApi';
-import { useMarkAttendanceMutation } from '../../api/attendanceApi';
-import { AttendanceStatus } from '../../types';
+import { useGetClassesQuery } from '../../app/api/classesApi';
+import { useGetStudentsQuery } from '../../app/api/studentsApi';
+import { useMarkAttendanceMutation } from '../../app/api/attendanceApi';
+import { AttendanceStatus } from '../../interfaces';
 import { getErrorMessage } from '../../utils/helpers';
 
 interface AttendanceRecord {
