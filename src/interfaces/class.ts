@@ -28,4 +28,3 @@ export interface CreateClassDto {
   teacherId?: number;
 }
 
-export interface UpdateClassDto extends Partial<CreateClassDto> {}

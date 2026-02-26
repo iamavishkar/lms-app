@@ -1,212 +1,95 @@
-/**
- * Central form initial values for all forms in the app.
- * For edit forms, use the getter functions which accept the entity
- * and return mapped form values (handling nested fields like user.id → userId).
- */
-import type {
-  User,
-  Role,
-  Student,
-  Teacher,
-  Parent,
-  Class,
-  Subject,
-  Exam,
-  Result,
-} from "../interfaces";
+import type { CreateUserDto } from "../interfaces/user";
+import type { CreateRoleDto } from "../interfaces/role";
+import type { CreateStudentDto } from "../interfaces/student";
+import type { CreateTeacherDto } from "../interfaces/teacher";
+import type { CreateParentDto } from "../interfaces/parent";
+import type { CreateClassDto } from "../interfaces/class";
+import type { CreateSubjectDto } from "../interfaces/subject";
+import type { CreateExamDto } from "../interfaces/exam";
+import type { CreateResultDto } from "../interfaces/result";
+import type { LoginCredentials, RegisterData } from "../interfaces/auth";
 
-// ─── Auth ────────────────────────────────────────────────────────────────────
-
-export const loginInitialValues = {
+export const loginInitialValues: LoginCredentials = {
   email: "",
   password: "",
 };
 
-export const registerInitialValues = {
+export const registerInitialValues: Omit<RegisterData, "roleId"> & {
+  roleId: number | undefined;
+} = {
   name: "",
   email: "",
   password: "",
-  roleId: undefined as number | undefined,
+  roleId: undefined,
 };
 
-// ─── User ────────────────────────────────────────────────────────────────────
-
-export const userInitialValues = {
+export const userInitialValues: CreateUserDto & { isActive: boolean } = {
   name: "",
   email: "",
   password: "",
-  roleId: undefined as number | undefined,
+  roleId: 0,
   isActive: true,
 };
 
-export const getUserFormValues = (user?: User) =>
-  user
-    ? {
-        name: user.name,
-        email: user.email,
-        password: "",
-        roleId: user.role?.id,
-        isActive: user.isActive,
-      }
-    : userInitialValues;
-
-// ─── Role ────────────────────────────────────────────────────────────────────
-
-export const roleInitialValues = {
+export const roleInitialValues: CreateRoleDto = {
   name: "",
   description: "",
 };
 
-export const getRoleFormValues = (role?: Role) =>
-  role ? { name: role.name, description: role.description ?? "" } : roleInitialValues;
-
-// ─── Student ─────────────────────────────────────────────────────────────────
-
-export const studentInitialValues = {
+export const studentInitialValues: CreateStudentDto = {
   enrollmentNumber: "",
   dateOfBirth: "",
   gender: "",
   address: "",
   phone: "",
-  userId: undefined as number | undefined,
-  classId: undefined as number | undefined,
-  parentId: undefined as number | undefined,
+  userId: 0,
+  classId: undefined,
+  parentId: undefined,
 };
 
-export const getStudentFormValues = (student?: Student) =>
-  student
-    ? {
-        enrollmentNumber: student.enrollmentNumber,
-        dateOfBirth: student.dateOfBirth?.split("T")[0] ?? "",
-        gender: student.gender,
-        address: student.address ?? "",
-        phone: student.phone ?? "",
-        userId: student.user?.id,
-        classId: student.class?.id,
-        parentId: student.parent?.id,
-      }
-    : studentInitialValues;
-
-// ─── Teacher ─────────────────────────────────────────────────────────────────
-
-export const teacherInitialValues = {
+export const teacherInitialValues: CreateTeacherDto = {
   employeeId: "",
   qualification: "",
   specialization: "",
   phone: "",
   address: "",
-  userId: undefined as number | undefined,
+  userId: 0,
 };
 
-export const getTeacherFormValues = (teacher?: Teacher) =>
-  teacher
-    ? {
-        employeeId: teacher.employeeId,
-        qualification: teacher.qualification ?? "",
-        specialization: teacher.specialization ?? "",
-        phone: teacher.phone ?? "",
-        address: teacher.address ?? "",
-        userId: teacher.user?.id,
-      }
-    : teacherInitialValues;
-
-// ─── Parent ──────────────────────────────────────────────────────────────────
-
-export const parentInitialValues = {
+export const parentInitialValues: CreateParentDto = {
   phone: "",
   address: "",
   occupation: "",
-  userId: undefined as number | undefined,
+  userId: 0,
 };
 
-export const getParentFormValues = (parent?: Parent) =>
-  parent
-    ? {
-        phone: parent.phone ?? "",
-        address: parent.address ?? "",
-        occupation: parent.occupation ?? "",
-        userId: parent.user?.id,
-      }
-    : parentInitialValues;
-
-// ─── Class ───────────────────────────────────────────────────────────────────
-
-export const classInitialValues = {
+export const classInitialValues: CreateClassDto = {
   name: "",
   section: "",
   academicYear: "",
-  teacherId: undefined as number | undefined,
+  teacherId: undefined,
 };
 
-export const getClassFormValues = (cls?: Class) =>
-  cls
-    ? {
-        name: cls.name,
-        section: cls.section ?? "",
-        academicYear: cls.academicYear,
-        teacherId: cls.teacher?.id,
-      }
-    : classInitialValues;
-
-// ─── Subject ─────────────────────────────────────────────────────────────────
-
-export const subjectInitialValues = {
+export const subjectInitialValues: CreateSubjectDto = {
   name: "",
   code: "",
   description: "",
 };
 
-export const getSubjectFormValues = (subject?: Subject) =>
-  subject
-    ? {
-        name: subject.name,
-        code: subject.code,
-        description: subject.description ?? "",
-      }
-    : subjectInitialValues;
-
-// ─── Exam ────────────────────────────────────────────────────────────────────
-
-export const examInitialValues = {
+export const examInitialValues: CreateExamDto = {
   name: "",
   type: "",
   date: "",
   duration: 60,
   totalMarks: 100,
-  subjectId: undefined as number | undefined,
-  classId: undefined as number | undefined,
+  subjectId: 0,
+  classId: 0,
 };
 
-export const getExamFormValues = (exam?: Exam) =>
-  exam
-    ? {
-        name: exam.name,
-        type: exam.type,
-        date: exam.date?.split("T")[0] ?? "",
-        duration: exam.duration,
-        totalMarks: exam.totalMarks,
-        subjectId: exam.subject?.id,
-        classId: exam.class?.id,
-      }
-    : examInitialValues;
-
-// ─── Result ──────────────────────────────────────────────────────────────────
-
-export const resultInitialValues = {
+export const resultInitialValues: CreateResultDto = {
   marksObtained: 0,
   grade: "",
   remarks: "",
-  studentId: undefined as number | undefined,
-  examId: undefined as number | undefined,
+  studentId: 0,
+  examId: 0,
 };
-
-export const getResultFormValues = (result?: Result) =>
-  result
-    ? {
-        marksObtained: result.marksObtained,
-        grade: result.grade ?? "",
-        remarks: result.remarks ?? "",
-        studentId: result.student?.id,
-        examId: result.exam?.id,
-      }
-    : resultInitialValues;

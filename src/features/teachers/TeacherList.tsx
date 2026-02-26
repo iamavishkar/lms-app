@@ -1,92 +1,71 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {
-  Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, TextField, InputAdornment,
-} from '@mui/material';
-import { Add, Edit, Delete, Search, Visibility } from '@mui/icons-material';
-import PageHeader from '../../components/common/PageHeader';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import ErrorAlert from '../../components/common/ErrorAlert';
-import ConfirmDialog from '../../components/common/ConfirmDialog';
-import NotificationSnackbar from '../../components/common/NotificationSnackbar';
-import { useGetTeachersQuery, useDeleteTeacherMutation } from '../../app/api/teachersApi';
-import { getErrorMessage } from '../../utils/helpers';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/material";
+import { DataGrid, GridColDef, GridActionsCellItem, GridToolbar } from "@mui/x-data-grid";
+import { Add, Edit, Delete, Visibility } from "@mui/icons-material";
+import PageHeader from "../../components/common/PageHeader";
+import ErrorAlert from "../../components/common/ErrorAlert";
+import ConfirmDialog from "../../components/common/ConfirmDialog";
+import NotificationSnackbar from "../../components/common/NotificationSnackbar";
+import { useGetTeachersQuery, useDeleteTeacherMutation } from "../../app/api/teachersApi";
+import { getErrorMessage } from "../../utils/helpers";
 
 const TeacherList: React.FC = () => {
   const navigate = useNavigate();
-  const [search, setSearch] = useState('');
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" as "success" | "error" });
 
-  const { data: teachers, isLoading, error } = useGetTeachersQuery();
+  const { data: teachers = [], isLoading, error } = useGetTeachersQuery();
   const [deleteTeacher] = useDeleteTeacherMutation();
-
-  const filtered = teachers?.filter(
-    (t) => t.user?.name.toLowerCase().includes(search.toLowerCase()) || t.employeeId.toLowerCase().includes(search.toLowerCase())
-  ) ?? [];
 
   const handleDelete = async () => {
     if (!deleteId) return;
     try {
       await deleteTeacher(deleteId).unwrap();
-      setSnackbar({ open: true, message: 'Teacher deleted', severity: 'success' });
+      setSnackbar({ open: true, message: "Teacher deleted", severity: "success" });
     } catch (err) {
-      setSnackbar({ open: true, message: getErrorMessage(err), severity: 'error' });
+      setSnackbar({ open: true, message: getErrorMessage(err), severity: "error" });
     }
     setDeleteId(null);
   };
 
-  if (isLoading) return <LoadingSpinner />;
   if (error) return <ErrorAlert message="Failed to load teachers" />;
+
+  const columns: GridColDef[] = [
+    { field: "employeeId", headerName: "Employee ID", width: 130 },
+    { field: "name", headerName: "Name", flex: 1, valueGetter: (_, row) => row.user?.name },
+    { field: "specialization", headerName: "Specialization", flex: 1, valueGetter: (value) => value || "-" },
+    { field: "qualification", headerName: "Qualification", flex: 1, valueGetter: (value) => value || "-" },
+    { field: "phone", headerName: "Phone", width: 130, valueGetter: (value) => value || "-" },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Actions",
+      getActions: ({ id }) => [
+        <GridActionsCellItem key="view" icon={<Visibility />} label="View" onClick={() => navigate(`/teachers/${id}`)} />,
+        <GridActionsCellItem key="edit" icon={<Edit />} label="Edit" onClick={() => navigate(`/teachers/${id}/edit`)} />,
+        <GridActionsCellItem key="delete" icon={<Delete />} label="Delete" onClick={() => setDeleteId(id as number)} color="error" />,
+      ],
+    },
+  ];
 
   return (
     <Box>
       <PageHeader
         title="Teachers"
-        subtitle={`${filtered.length} teachers`}
-        action={{ label: 'Add Teacher', icon: <Add />, onClick: () => navigate('/teachers/new') }}
+        subtitle={`${teachers.length} teachers`}
+        action={{ label: "Add Teacher", icon: <Add />, onClick: () => navigate("/teachers/new") }}
       />
-      <TextField
-        placeholder="Search teachers..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        size="small"
-        sx={{ mb: 2, width: 300 }}
-        InputProps={{ startAdornment: <InputAdornment position="start"><Search /></InputAdornment> }}
+      <DataGrid
+        rows={teachers}
+        columns={columns}
+        loading={isLoading}
+        autoHeight
+        slots={{ toolbar: GridToolbar }}
+        slotProps={{ toolbar: { showQuickFilter: true } }}
+        pageSizeOptions={[10, 25, 50]}
+        initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
       />
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Employee ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Specialization</TableCell>
-              <TableCell>Qualification</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filtered.map((teacher) => (
-              <TableRow key={teacher.id} hover>
-                <TableCell>{teacher.employeeId}</TableCell>
-                <TableCell>{teacher.user?.name}</TableCell>
-                <TableCell>{teacher.specialization || '-'}</TableCell>
-                <TableCell>{teacher.qualification || '-'}</TableCell>
-                <TableCell>{teacher.phone || '-'}</TableCell>
-                <TableCell align="right">
-                  <Tooltip title="View"><IconButton size="small" onClick={() => navigate(`/teachers/${teacher.id}`)}><Visibility fontSize="small" /></IconButton></Tooltip>
-                  <Tooltip title="Edit"><IconButton size="small" onClick={() => navigate(`/teachers/${teacher.id}/edit`)}><Edit fontSize="small" /></IconButton></Tooltip>
-                  <Tooltip title="Delete"><IconButton size="small" color="error" onClick={() => setDeleteId(teacher.id)}><Delete fontSize="small" /></IconButton></Tooltip>
-                </TableCell>
-              </TableRow>
-            ))}
-            {filtered.length === 0 && (
-              <TableRow><TableCell colSpan={6} align="center">No teachers found</TableCell></TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
       <ConfirmDialog
         open={!!deleteId}
         title="Delete Teacher"

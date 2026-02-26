@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 import { API_ENDPOINTS } from "./endpoints";
-import type { Exam, CreateExamDto, UpdateExamDto } from "../../interfaces";
+import type { Exam, CreateExamDto } from "../../interfaces";
 
 export const examsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,7 +16,7 @@ export const examsApi = apiSlice.injectEndpoints({
 
     saveExam: builder.mutation<
       Exam,
-      { id?: number; data: CreateExamDto | UpdateExamDto }
+      { id?: number; data: CreateExamDto | Partial<CreateExamDto> }
     >({
       query: ({ id, data }) => ({
         url: id ? API_ENDPOINTS.EXAMS.BY_ID(id) : API_ENDPOINTS.EXAMS.BASE,

@@ -24,4 +24,3 @@ export interface CreateExamDto {
   classId: number;
 }
 
-export interface UpdateExamDto extends Partial<CreateExamDto> {}

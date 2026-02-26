@@ -20,4 +20,3 @@ export interface CreateResultDto {
   examId: number;
 }
 
-export interface UpdateResultDto extends Partial<CreateResultDto> {}

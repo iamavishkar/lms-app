@@ -25,4 +25,3 @@ export interface CreateParentDto {
   userId: number;
 }
 
-export interface UpdateParentDto extends Partial<CreateParentDto> {}

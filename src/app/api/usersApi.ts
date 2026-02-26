@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 import { API_ENDPOINTS } from "./endpoints";
-import type { User, CreateUserDto, UpdateUserDto } from "../../interfaces";
+import type { User, CreateUserDto } from "../../interfaces";
 
 export const usersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -17,7 +17,7 @@ export const usersApi = apiSlice.injectEndpoints({
     /** Single save mutation: creates when no id, updates when id is provided */
     saveUser: builder.mutation<
       User,
-      { id?: number; data: CreateUserDto | UpdateUserDto }
+      { id?: number; data: CreateUserDto | Partial<CreateUserDto> }
     >({
       query: ({ id, data }) => ({
         url: id ? API_ENDPOINTS.USERS.BY_ID(id) : API_ENDPOINTS.USERS.BASE,

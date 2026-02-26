@@ -18,4 +18,3 @@ export interface CreateSubjectDto {
   description?: string;
 }
 
-export interface UpdateSubjectDto extends Partial<CreateSubjectDto> {}

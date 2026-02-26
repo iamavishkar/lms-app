@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Card, CardContent } from "@mui/material";
 import { useDispatch } from "react-redux";
@@ -9,7 +10,7 @@ import { showSnackbar } from "../../app/store/uiSlice";
 import { getErrorMessage } from "../../utils/helpers";
 import { ROUTES } from "../../routes/routes";
 import { subjectFormFields } from "../../forms/form-fields";
-import { getSubjectFormValues } from "../../forms/form-values";
+import { subjectInitialValues } from "../../forms/form-values";
 import { subjectFormSchema } from "../../forms/form-schema";
 import type { CreateSubjectDto } from "../../interfaces";
 
@@ -19,26 +20,13 @@ const SubjectForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: subject, isLoading: loadingSubject } = useGetSubjectByIdQuery(
-    Number(id),
-    { skip: !isEdit }
-  );
+  const { data: subject, isLoading: loadingSubject } = useGetSubjectByIdQuery(Number(id), { skip: !isEdit });
   const [saveSubject, { isLoading }] = useSaveSubjectMutation();
 
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveSubject({
-        id: isEdit ? Number(id) : undefined,
-        data: values as unknown as CreateSubjectDto,
-      }).unwrap();
-      dispatch(
-        showSnackbar({
-          message: isEdit
-            ? "Subject updated successfully"
-            : "Subject created successfully",
-          severity: "success",
-        })
-      );
+      await saveSubject({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateSubjectDto }).unwrap();
+      dispatch(showSnackbar({ message: isEdit ? "Subject updated successfully" : "Subject created successfully", severity: "success" }));
       navigate(ROUTES.SUBJECTS.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));
@@ -54,9 +42,7 @@ const SubjectForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={subjectFormFields}
-            initialValues={
-              getSubjectFormValues(subject) as unknown as Record<string, unknown>
-            }
+            initialValues={(subject || subjectInitialValues) as unknown as Record<string, unknown>}
             validationSchema={subjectFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.SUBJECTS.LIST)}

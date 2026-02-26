@@ -11,7 +11,3 @@ export interface CreateRoleDto {
   description?: string;
 }
 
-export interface UpdateRoleDto {
-  name?: string;
-  description?: string;
-}

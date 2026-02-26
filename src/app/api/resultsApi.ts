@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 import { API_ENDPOINTS } from "./endpoints";
-import type { Result, CreateResultDto, UpdateResultDto } from "../../interfaces";
+import type { Result, CreateResultDto } from "../../interfaces";
 
 export const resultsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -21,7 +21,7 @@ export const resultsApi = apiSlice.injectEndpoints({
 
     saveResult: builder.mutation<
       Result,
-      { id?: number; data: CreateResultDto | UpdateResultDto }
+      { id?: number; data: CreateResultDto | Partial<CreateResultDto> }
     >({
       query: ({ id, data }) => ({
         url: id

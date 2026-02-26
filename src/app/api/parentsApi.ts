@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 import { API_ENDPOINTS } from "./endpoints";
-import type { Parent, CreateParentDto, UpdateParentDto } from "../../interfaces";
+import type { Parent, CreateParentDto } from "../../interfaces";
 
 export const parentsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,7 +16,7 @@ export const parentsApi = apiSlice.injectEndpoints({
 
     saveParent: builder.mutation<
       Parent,
-      { id?: number; data: CreateParentDto | UpdateParentDto }
+      { id?: number; data: CreateParentDto | Partial<CreateParentDto> }
     >({
       query: ({ id, data }) => ({
         url: id

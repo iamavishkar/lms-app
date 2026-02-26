@@ -18,10 +18,3 @@ export interface CreateUserDto {
   isActive?: boolean;
 }
 
-export interface UpdateUserDto {
-  name?: string;
-  email?: string;
-  password?: string;
-  roleId?: number;
-  isActive?: boolean;
-}

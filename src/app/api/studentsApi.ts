@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 import { API_ENDPOINTS } from "./endpoints";
-import type { Student, CreateStudentDto, UpdateStudentDto } from "../../interfaces";
+import type { Student, CreateStudentDto } from "../../interfaces";
 
 export const studentsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,7 +16,7 @@ export const studentsApi = apiSlice.injectEndpoints({
 
     saveStudent: builder.mutation<
       Student,
-      { id?: number; data: CreateStudentDto | UpdateStudentDto }
+      { id?: number; data: CreateStudentDto | Partial<CreateStudentDto> }
     >({
       query: ({ id, data }) => ({
         url: id

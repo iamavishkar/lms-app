@@ -28,4 +28,3 @@ export interface CreateStudentDto {
   parentId?: number;
 }
 
-export interface UpdateStudentDto extends Partial<CreateStudentDto> {}

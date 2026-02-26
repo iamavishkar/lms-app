@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 import { API_ENDPOINTS } from "./endpoints";
-import type { Teacher, CreateTeacherDto, UpdateTeacherDto } from "../../interfaces";
+import type { Teacher, CreateTeacherDto } from "../../interfaces";
 
 export const teachersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,7 +16,7 @@ export const teachersApi = apiSlice.injectEndpoints({
 
     saveTeacher: builder.mutation<
       Teacher,
-      { id?: number; data: CreateTeacherDto | UpdateTeacherDto }
+      { id?: number; data: CreateTeacherDto | Partial<CreateTeacherDto> }
     >({
       query: ({ id, data }) => ({
         url: id

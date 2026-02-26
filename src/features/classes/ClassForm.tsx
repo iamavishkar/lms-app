@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Card, CardContent } from "@mui/material";
 import { useDispatch } from "react-redux";
@@ -11,7 +11,8 @@ import { showSnackbar } from "../../app/store/uiSlice";
 import { getErrorMessage } from "../../utils/helpers";
 import { ROUTES } from "../../routes/routes";
 import { classFormFields } from "../../forms/form-fields";
-import { getClassFormValues } from "../../forms/form-values";import { classFormSchema } from "../../forms/form-schema";
+import { classInitialValues } from "../../forms/form-values";
+import { classFormSchema } from "../../forms/form-schema";
 import type { CreateClassDto } from "../../interfaces";
 
 const ClassForm: React.FC = () => {
@@ -20,10 +21,7 @@ const ClassForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: cls, isLoading: loadingClass } = useGetClassByIdQuery(
-    Number(id),
-    { skip: !isEdit }
-  );
+  const { data: cls, isLoading: loadingClass } = useGetClassByIdQuery(Number(id), { skip: !isEdit });
   const { data: teachers = [] } = useGetTeachersQuery();
   const [saveClass, { isLoading }] = useSaveClassMutation();
 
@@ -35,10 +33,7 @@ const ClassForm: React.FC = () => {
               ...f,
               options: [
                 { label: "None", value: "" },
-                ...teachers.map((t) => ({
-                  label: t.user?.name ?? `Teacher #${t.id}`,
-                  value: t.id,
-                })),
+                ...teachers.map((t) => ({ label: t.user?.name ?? `Teacher #${t.id}`, value: t.id })),
               ],
             }
           : f
@@ -46,20 +41,14 @@ const ClassForm: React.FC = () => {
     [teachers]
   );
 
+  const editValues = cls
+    ? { name: cls.name, section: cls.section ?? "", academicYear: cls.academicYear, teacherId: cls.teacher?.id }
+    : undefined;
+
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveClass({
-        id: isEdit ? Number(id) : undefined,
-        data: values as unknown as CreateClassDto,
-      }).unwrap();
-      dispatch(
-        showSnackbar({
-          message: isEdit
-            ? "Class updated successfully"
-            : "Class created successfully",
-          severity: "success",
-        })
-      );
+      await saveClass({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateClassDto }).unwrap();
+      dispatch(showSnackbar({ message: isEdit ? "Class updated successfully" : "Class created successfully", severity: "success" }));
       navigate(ROUTES.CLASSES.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));
@@ -75,9 +64,7 @@ const ClassForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={fields}
-            initialValues={
-              getClassFormValues(cls) as unknown as Record<string, unknown>
-            }
+            initialValues={(editValues || classInitialValues) as unknown as Record<string, unknown>}
             validationSchema={classFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.CLASSES.LIST)}

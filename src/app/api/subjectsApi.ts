@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 import { API_ENDPOINTS } from "./endpoints";
-import type { Subject, CreateSubjectDto, UpdateSubjectDto } from "../../interfaces";
+import type { Subject, CreateSubjectDto } from "../../interfaces";
 
 export const subjectsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,7 +16,7 @@ export const subjectsApi = apiSlice.injectEndpoints({
 
     saveSubject: builder.mutation<
       Subject,
-      { id?: number; data: CreateSubjectDto | UpdateSubjectDto }
+      { id?: number; data: CreateSubjectDto | Partial<CreateSubjectDto> }
     >({
       query: ({ id, data }) => ({
         url: id

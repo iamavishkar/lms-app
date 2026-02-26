@@ -1,6 +1,6 @@
 import { apiSlice } from "./apiSlice";
 import { API_ENDPOINTS } from "./endpoints";
-import type { Role, CreateRoleDto, UpdateRoleDto } from "../../interfaces";
+import type { Role, CreateRoleDto } from "../../interfaces";
 
 export const rolesApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -16,7 +16,7 @@ export const rolesApi = apiSlice.injectEndpoints({
 
     saveRole: builder.mutation<
       Role,
-      { id?: number; data: CreateRoleDto | UpdateRoleDto }
+      { id?: number; data: CreateRoleDto | Partial<CreateRoleDto> }
     >({
       query: ({ id, data }) => ({
         url: id ? API_ENDPOINTS.ROLES.BY_ID(id) : API_ENDPOINTS.ROLES.BASE,

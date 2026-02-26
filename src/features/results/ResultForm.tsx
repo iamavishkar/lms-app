@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, Card, CardContent } from "@mui/material";
 import { useDispatch } from "react-redux";
@@ -11,8 +11,8 @@ import { useGetExamsQuery } from "../../app/api/examsApi";
 import { showSnackbar } from "../../app/store/uiSlice";
 import { getErrorMessage } from "../../utils/helpers";
 import { ROUTES } from "../../routes/routes";
-import { getResultFormFields } from "../../forms/form-fields";
-import { getResultFormValues } from "../../forms/form-values";
+import { resultFormFields } from "../../forms/form-fields";
+import { resultInitialValues } from "../../forms/form-values";
 import { resultFormSchema } from "../../forms/form-schema";
 import type { CreateResultDto } from "../../interfaces";
 
@@ -22,49 +22,36 @@ const ResultForm: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: result, isLoading: loadingResult } = useGetResultByIdQuery(
-    Number(id),
-    { skip: !isEdit }
-  );
+  const { data: result, isLoading: loadingResult } = useGetResultByIdQuery(Number(id), { skip: !isEdit });
   const { data: students = [] } = useGetStudentsQuery();
   const { data: exams = [] } = useGetExamsQuery();
   const [saveResult, { isLoading }] = useSaveResultMutation();
 
   const fields = useMemo(
     () =>
-      getResultFormFields().map((f) => {
+      resultFormFields.map((f) => {
         if (f.name === "studentId")
-          return {
-            ...f,
-            options: students.map((s) => ({
-              label: s.user?.name ?? s.enrollmentNumber,
-              value: s.id,
-            })),
-          };
-        if (f.name === "examId")
-          return {
-            ...f,
-            options: exams.map((e) => ({ label: e.name, value: e.id })),
-          };
+          return { ...f, options: students.map((s) => ({ label: s.user?.name ?? s.enrollmentNumber, value: s.id })) };
+        if (f.name === "examId") return { ...f, options: exams.map((e) => ({ label: e.name, value: e.id })) };
         return f;
       }),
     [students, exams]
   );
 
+  const editValues = result
+    ? {
+        marksObtained: result.marksObtained,
+        grade: result.grade ?? "",
+        remarks: result.remarks ?? "",
+        studentId: result.student?.id,
+        examId: result.exam?.id,
+      }
+    : undefined;
+
   const onSubmit = async (values: Record<string, unknown>) => {
     try {
-      await saveResult({
-        id: isEdit ? Number(id) : undefined,
-        data: values as unknown as CreateResultDto,
-      }).unwrap();
-      dispatch(
-        showSnackbar({
-          message: isEdit
-            ? "Result updated successfully"
-            : "Result created successfully",
-          severity: "success",
-        })
-      );
+      await saveResult({ id: isEdit ? Number(id) : undefined, data: values as unknown as CreateResultDto }).unwrap();
+      dispatch(showSnackbar({ message: isEdit ? "Result updated successfully" : "Result created successfully", severity: "success" }));
       navigate(ROUTES.RESULTS.LIST);
     } catch (err) {
       dispatch(showSnackbar({ message: getErrorMessage(err), severity: "error" }));
@@ -80,9 +67,7 @@ const ResultForm: React.FC = () => {
         <CardContent>
           <FormRenderer
             fields={fields}
-            initialValues={
-              getResultFormValues(result) as unknown as Record<string, unknown>
-            }
+            initialValues={(editValues || resultInitialValues) as unknown as Record<string, unknown>}
             validationSchema={resultFormSchema}
             onSubmit={onSubmit}
             onCancel={() => navigate(ROUTES.RESULTS.LIST)}
