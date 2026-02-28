@@ -19,7 +19,7 @@ const StudentDashboard: React.FC = () => {
       </Typography>
 
       <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatsCard
             title="My Classes"
             value={stats?.totalClasses ?? 0}
@@ -27,7 +27,7 @@ const StudentDashboard: React.FC = () => {
             color="#1976d2"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatsCard
             title="Attendance"
             value={stats?.recentAttendance?.length ?? 0}
@@ -35,7 +35,7 @@ const StudentDashboard: React.FC = () => {
             color="#9c27b0"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatsCard
             title="Upcoming Exams"
             value={stats?.upcomingExams?.length ?? 0}
@@ -43,7 +43,7 @@ const StudentDashboard: React.FC = () => {
             color="#2e7d32"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <StatsCard
             title="My Results"
             value={stats?.totalExams ?? 0}
@@ -54,7 +54,7 @@ const StudentDashboard: React.FC = () => {
       </Grid>
 
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Card>
             <CardContent>
               <Typography variant="h6" fontWeight="bold" mb={2}>

@@ -63,7 +63,7 @@ const TeacherDetail: React.FC = () => {
           <Divider sx={{ mb: 2 }} />
           <Grid container spacing={2}>
             {fields.map((f) => (
-              <Grid item xs={12} md={f.md} key={f.label}>
+              <Grid size={{ xs: 12, md: f.md }} key={f.label}>
                 <Typography variant="caption" color="text.secondary">
                   {f.label}
                 </Typography>

@@ -95,10 +95,9 @@ const ResultList: React.FC = () => {
         />,
         <GridActionsCellItem
           key="delete"
-          icon={<Delete />}
+          icon={<Delete color="error" />}
           label="Delete"
           onClick={() => setDeleteId(id as number)}
-          color="error"
         />,
       ],
     },

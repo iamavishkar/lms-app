@@ -68,7 +68,7 @@ const ClassDetail: React.FC = () => {
         <CardContent>
           <Grid container spacing={2}>
             {infoFields.map((f) => (
-              <Grid item xs={12} md={f.md} key={f.label}>
+              <Grid size={{ xs: 12, md: f.md }} key={f.label}>
                 <Typography variant="caption" color="text.secondary">
                   {f.label}
                 </Typography>

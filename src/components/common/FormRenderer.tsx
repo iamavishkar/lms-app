@@ -84,7 +84,7 @@ function FormRenderer<T extends Record<string, unknown>>({
             {fields
               .filter((f) => !f.hidden)
               .map((fieldDef) => (
-                <Grid item xs={12} md={fieldDef.gridMd ?? 6} key={fieldDef.name}>
+                <Grid size={{ xs: 12, md: fieldDef.gridMd ?? 6 }} key={fieldDef.name}>
                   <Field name={fieldDef.name}>
                     {({ field }: FieldProps) => {
                       const hasError = !!(errors[fieldDef.name] && touched[fieldDef.name]);

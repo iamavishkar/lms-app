@@ -39,7 +39,7 @@ const AdminDashboard: React.FC = () => {
       </Typography>
 
       <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <StatsCard
             title="Total Students"
             value={stats?.totalStudents ?? 0}
@@ -47,7 +47,7 @@ const AdminDashboard: React.FC = () => {
             color="#1976d2"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <StatsCard
             title="Total Teachers"
             value={stats?.totalTeachers ?? 0}
@@ -55,7 +55,7 @@ const AdminDashboard: React.FC = () => {
             color="#9c27b0"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <StatsCard
             title="Total Parents"
             value={stats?.totalParents ?? 0}
@@ -63,7 +63,7 @@ const AdminDashboard: React.FC = () => {
             color="#2e7d32"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <StatsCard
             title="Total Classes"
             value={stats?.totalClasses ?? 0}
@@ -71,7 +71,7 @@ const AdminDashboard: React.FC = () => {
             color="#ed6c02"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <StatsCard
             title="Total Subjects"
             value={stats?.totalSubjects ?? 0}
@@ -79,7 +79,7 @@ const AdminDashboard: React.FC = () => {
             color="#0288d1"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2}>
+        <Grid size={{ xs: 12, sm: 6, md: 4, lg: 2 }}>
           <StatsCard
             title="Total Exams"
             value={stats?.totalExams ?? 0}
@@ -91,7 +91,7 @@ const AdminDashboard: React.FC = () => {
 
       <Grid container spacing={3}>
         {stats?.upcomingExams && stats.upcomingExams.length > 0 && (
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" fontWeight="bold" mb={2}>
@@ -125,7 +125,7 @@ const AdminDashboard: React.FC = () => {
         )}
 
         {stats?.recentAttendance && stats.recentAttendance.length > 0 && (
-          <Grid item xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" fontWeight="bold" mb={2}>

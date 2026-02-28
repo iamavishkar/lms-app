@@ -50,11 +50,11 @@ const ExamDetail: React.FC = () => {
             {fields.map((f, i) => (
               <React.Fragment key={i}>
                 {f.label === "Subject" && (
-                  <Grid item xs={12}>
+                  <Grid size={12}>
                     <Divider />
                   </Grid>
                 )}
-                <Grid item xs={12} md={f.md}>
+                <Grid size={{ xs: 12, md: f.md }}>
                   <Typography variant="caption" color="text.secondary">
                     {f.label}
                   </Typography>

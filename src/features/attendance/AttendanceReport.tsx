@@ -64,7 +64,7 @@ const AttendanceReport: React.FC = () => {
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <TextField
                 select
                 label="Filter by Class"
@@ -81,7 +81,7 @@ const AttendanceReport: React.FC = () => {
                 ))}
               </TextField>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <TextField
                 select
                 label="Filter by Student"
@@ -103,7 +103,7 @@ const AttendanceReport: React.FC = () => {
       </Card>
 
       <Grid container spacing={2} mb={3}>
-        <Grid item xs={6} md={3}>
+        <Grid size={{ xs: 6, md: 3 }}>
           <Card>
             <CardContent sx={{ textAlign: "center" }}>
               <Typography variant="h4" fontWeight="bold">
@@ -113,7 +113,7 @@ const AttendanceReport: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid size={{ xs: 6, md: 3 }}>
           <Card>
             <CardContent sx={{ textAlign: "center" }}>
               <Typography variant="h4" fontWeight="bold" color="success.main">
@@ -123,7 +123,7 @@ const AttendanceReport: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid size={{ xs: 6, md: 3 }}>
           <Card>
             <CardContent sx={{ textAlign: "center" }}>
               <Typography variant="h4" fontWeight="bold" color="error.main">
@@ -133,7 +133,7 @@ const AttendanceReport: React.FC = () => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid size={{ xs: 6, md: 3 }}>
           <Card>
             <CardContent sx={{ textAlign: "center" }}>
               <Typography variant="h4" fontWeight="bold" color="warning.main">

@@ -63,7 +63,7 @@ const UserDetail: React.FC = () => {
         <CardContent>
           <Grid container spacing={2}>
             {textFields.slice(0, 2).map((f) => (
-              <Grid item xs={12} md={f.md} key={f.label}>
+              <Grid size={{ xs: 12, md: f.md }} key={f.label}>
                 <Typography variant="caption" color="text.secondary">
                   {f.label}
                 </Typography>
@@ -72,22 +72,22 @@ const UserDetail: React.FC = () => {
                 </Typography>
               </Grid>
             ))}
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Divider />
             </Grid>
             {chipFields.map((f) => (
-              <Grid item xs={12} md={f.md} key={f.label}>
+              <Grid size={{ xs: 12, md: f.md }} key={f.label}>
                 <Typography variant="caption" color="text.secondary">
                   {f.label}
                 </Typography>
                 <Box mt={0.5}>{f.node}</Box>
               </Grid>
             ))}
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Divider />
             </Grid>
             {textFields.slice(2).map((f) => (
-              <Grid item xs={12} md={f.md} key={f.label}>
+              <Grid size={{ xs: 12, md: f.md }} key={f.label}>
                 <Typography variant="caption" color="text.secondary">
                   {f.label}
                 </Typography>
