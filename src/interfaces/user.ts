@@ -2,18 +2,11 @@ import type { Role } from "./role";
 
 export interface User {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  isActive: boolean;
+  password: string;
   role: Role;
   createdAt: string;
   updatedAt: string;
-}
-
-export interface CreateUserDto {
-  name: string;
-  email: string;
-  password: string;
-  roleId: number;
-  isActive?: boolean;
 }

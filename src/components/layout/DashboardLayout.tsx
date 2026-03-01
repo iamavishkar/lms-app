@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { AppProvider, DashboardLayout } from "@toolpad/core";
+import { AppProvider, DashboardLayout, PageContainer } from "@toolpad/core";
 import { useDispatch, useSelector } from "react-redux";
 import type { Router } from "@toolpad/core";
 import type { RootState } from "../../app/store";
@@ -33,7 +33,8 @@ export default function AppDashboardLayout() {
 
   // Map Redux auth user to Toolpad's Session format
   const session = useMemo(
-    () => (user ? { user: { name: user.name, email: user.email } } : null),
+    () =>
+      user ? { user: { name: `${user.firstName} ${user.lastName}`, email: user.email } } : null,
     [user]
   );
 
@@ -59,8 +60,19 @@ export default function AppDashboardLayout() {
       authentication={authentication}
       branding={{ title: "LMS Portal" }}
     >
-      <DashboardLayout>
-        <Outlet />
+      <DashboardLayout sidebarExpandedWidth={250}>
+        <PageContainer
+          sx={{
+            maxWidth: "100% !important",
+            width: "100%",
+            px: { xs: 2, sm: 2, md: 2 },
+          }}
+          slots={{
+            header: () => <></>,
+          }}
+        >
+          <Outlet />
+        </PageContainer>
       </DashboardLayout>
       <GlobalSnackbar />
     </AppProvider>

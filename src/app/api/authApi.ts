@@ -10,6 +10,10 @@ export const authApi = apiSlice.injectEndpoints({
         method: "POST",
         body: credentials,
       }),
+      transformResponse: (response: any) => ({
+        access_token: response?.data?.access_token,
+        user: response?.data?.user,
+      }),
     }),
     register: builder.mutation<AuthResponse, RegisterData>({
       query: (userData) => ({

@@ -45,7 +45,7 @@ const Login: React.FC = () => {
 
   const onSubmit = async (data: LoginCredentials) => {
     try {
-      const result = await login(data).unwrap();
+      const result = await login(data).unwrap();      
       dispatch(setCredentials({ user: result.user, token: result.access_token }));
       navigate("/dashboard");
     } catch {
