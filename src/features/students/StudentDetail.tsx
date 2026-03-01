@@ -64,10 +64,10 @@ const StudentDetail: React.FC = () => {
         <CardContent>
           <Box display="flex" alignItems="center" gap={2} mb={3}>
             <Avatar sx={{ width: 72, height: 72, bgcolor: "primary.main", fontSize: 28 }}>
-              {student.user?.firstName?.[0]?.toUpperCase()}
+              {student.user?.name?.[0]?.toUpperCase()}
             </Avatar>
             <Box>
-              <Typography variant="h6">{`${student.user?.firstName} ${student.user?.lastName}`}</Typography>
+              <Typography variant="h6">{student.user?.name}</Typography>
               <Typography variant="body2" color="text.secondary">
                 {student.user?.email}
               </Typography>

@@ -34,6 +34,10 @@ export const teachersApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Teacher"],
     }),
+
+    getMyTeacherCourses: builder.query<unknown[], void>({
+      query: () => API_ENDPOINTS.TEACHERS.ME.COURSES,
+    }),
   }),
 });
 
@@ -42,4 +46,5 @@ export const {
   useGetTeacherByIdQuery,
   useSaveTeacherMutation,
   useDeleteTeacherMutation,
+  useGetMyTeacherCoursesQuery,
 } = teachersApi;

@@ -18,14 +18,25 @@ export const API_ENDPOINTS = {
     BY_ID: (id: number) => `/students/${id}`,
     ATTENDANCE: (id: number) => `/attendance/student/${id}`,
     RESULTS: (id: number) => `/results/student/${id}`,
+    ME: {
+      COURSES: "/students/me/courses",
+      COURSE_ATTENDANCE: (courseId: number) => `/students/me/courses/${courseId}/attendance`,
+      RESULTS: "/students/me/results",
+    },
   },
   TEACHERS: {
     BASE: "/teachers",
     BY_ID: (id: number) => `/teachers/${id}`,
+    ME: {
+      COURSES: "/teachers/me/courses",
+    },
   },
   PARENTS: {
     BASE: "/parents",
     BY_ID: (id: number) => `/parents/${id}`,
+    ME: {
+      CHILDREN: "/parents/me/children",
+    },
   },
   CLASSES: {
     BASE: "/classes",

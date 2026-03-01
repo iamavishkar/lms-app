@@ -9,6 +9,7 @@ import ConfirmDialog from "../../components/common/ConfirmDialog";
 import NotificationSnackbar from "../../components/common/NotificationSnackbar";
 import { useGetAttendanceQuery, useDeleteAttendanceMutation } from "../../app/api/attendanceApi";
 import { getErrorMessage, formatDate } from "../../utils/helpers";
+import { usePermissions } from "../../hooks/usePermissions";
 
 const statusColor: Record<string, "success" | "error" | "warning"> = {
   present: "success",
@@ -18,6 +19,7 @@ const statusColor: Record<string, "success" | "error" | "warning"> = {
 
 const AttendanceList: React.FC = () => {
   const navigate = useNavigate();
+  const { canMarkAttendance } = usePermissions();
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -92,11 +94,15 @@ const AttendanceList: React.FC = () => {
       <PageHeader
         title="Attendance"
         subtitle={`${attendance.length} records`}
-        action={{
-          label: "Mark Attendance",
-          icon: <Add />,
-          onClick: () => navigate("/attendance/mark"),
-        }}
+        action={
+          canMarkAttendance
+            ? {
+                label: "Mark Attendance",
+                icon: <Add />,
+                onClick: () => navigate("/attendance/mark"),
+              }
+            : undefined
+        }
       />
       <DataGrid
         rows={attendance}

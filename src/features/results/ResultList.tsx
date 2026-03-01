@@ -9,9 +9,11 @@ import ConfirmDialog from "../../components/common/ConfirmDialog";
 import NotificationSnackbar from "../../components/common/NotificationSnackbar";
 import { useGetResultsQuery, useDeleteResultMutation } from "../../app/api/resultsApi";
 import { getErrorMessage, calculateGrade } from "../../utils/helpers";
+import { usePermissions } from "../../hooks/usePermissions";
 
 const ResultList: React.FC = () => {
   const navigate = useNavigate();
+  const { canManageResults } = usePermissions();
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -35,7 +37,7 @@ const ResultList: React.FC = () => {
 
   if (error) return <ErrorAlert message="Failed to load results" />;
 
-  const columns: GridColDef[] = [
+  const baseColumns: GridColDef[] = [
     {
       field: "student",
       headerName: "Student",
@@ -82,33 +84,40 @@ const ResultList: React.FC = () => {
       flex: 1,
       renderCell: ({ value }) => <>{value || "-"}</>,
     },
-    {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
-      getActions: ({ id }) => [
-        <GridActionsCellItem
-          key="edit"
-          icon={<Edit />}
-          label="Edit"
-          onClick={() => navigate(`/results/${id}/edit`)}
-        />,
-        <GridActionsCellItem
-          key="delete"
-          icon={<Delete color="error" />}
-          label="Delete"
-          onClick={() => setDeleteId(id as number)}
-        />,
-      ],
-    },
   ];
+
+  const actionColumn: GridColDef = {
+    field: "actions",
+    type: "actions",
+    headerName: "Actions",
+    getActions: ({ id }) => [
+      <GridActionsCellItem
+        key="edit"
+        icon={<Edit />}
+        label="Edit"
+        onClick={() => navigate(`/results/${id}/edit`)}
+      />,
+      <GridActionsCellItem
+        key="delete"
+        icon={<Delete color="error" />}
+        label="Delete"
+        onClick={() => setDeleteId(id as number)}
+      />,
+    ],
+  };
+
+  const columns: GridColDef[] = canManageResults ? [...baseColumns, actionColumn] : baseColumns;
 
   return (
     <Box>
       <PageHeader
         title="Results"
         subtitle={`${results.length} results`}
-        action={{ label: "Add Result", icon: <Add />, onClick: () => navigate("/results/new") }}
+        action={
+          canManageResults
+            ? { label: "Add Result", icon: <Add />, onClick: () => navigate("/results/new") }
+            : undefined
+        }
       />
       <DataGrid
         rows={results}

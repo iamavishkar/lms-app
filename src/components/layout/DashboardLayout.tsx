@@ -34,7 +34,7 @@ export default function AppDashboardLayout() {
   // Map Redux auth user to Toolpad's Session format
   const session = useMemo(
     () =>
-      user ? { user: { name: `${user.firstName} ${user.lastName}`, email: user.email } } : null,
+      user ? { user: { name: user.name, email: user.email } } : null,
     [user]
   );
 
