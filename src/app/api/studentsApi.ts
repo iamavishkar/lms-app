@@ -44,6 +44,20 @@ export const studentsApi = apiSlice.injectEndpoints({
       query: (id) => API_ENDPOINTS.STUDENTS.RESULTS(id),
       providesTags: ["Result"],
     }),
+
+    getMyStudentCourses: builder.query<unknown[], void>({
+      query: () => API_ENDPOINTS.STUDENTS.ME.COURSES,
+    }),
+
+    getMyCourseAttendance: builder.query<unknown[], number>({
+      query: (courseId) => API_ENDPOINTS.STUDENTS.ME.COURSE_ATTENDANCE(courseId),
+      providesTags: ["Attendance"],
+    }),
+
+    getMyStudentResults: builder.query<unknown[], void>({
+      query: () => API_ENDPOINTS.STUDENTS.ME.RESULTS,
+      providesTags: ["Result"],
+    }),
   }),
 });
 
@@ -54,4 +68,7 @@ export const {
   useDeleteStudentMutation,
   useGetStudentAttendanceQuery,
   useGetStudentResultsQuery,
+  useGetMyStudentCoursesQuery,
+  useGetMyCourseAttendanceQuery,
+  useGetMyStudentResultsQuery,
 } = studentsApi;

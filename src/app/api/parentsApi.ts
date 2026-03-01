@@ -33,6 +33,10 @@ export const parentsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Parent"],
     }),
+
+    getMyChildren: builder.query<unknown[], void>({
+      query: () => API_ENDPOINTS.PARENTS.ME.CHILDREN,
+    }),
   }),
 });
 
@@ -41,4 +45,5 @@ export const {
   useGetParentByIdQuery,
   useSaveParentMutation,
   useDeleteParentMutation,
+  useGetMyChildrenQuery,
 } = parentsApi;
